@@ -55,5 +55,5 @@ window.BODA = {
   poster: '',                         // opcional: imagen que se ve mientras carga el video (ej. 'assets/fotos/portada.jpg')
 
   // URL de la App web de Google Apps Script (ver README). Vacío = modo demostración.
-  apiUrl: ''
+  apiUrl: 'https://script.google.com/macros/s/AKfycbx92Z6gu0VCLB_7m59kkHpqoZcEUtE38QHBbyjJ5oBenLlNsuiIDj3wsE43fu6fMEk4YQ/exec'
 };
