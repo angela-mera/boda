@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F0F0F0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Valentina &amp; Santiago · Nuestra Boda</title>
+  <meta name="description" content="Estás invitado a nuestra boda · 19 de diciembre de 2026">
+
+  <!-- Vista previa al compartir por WhatsApp. og:image debe ser una URL completa (cámbiala al publicar) -->
+  <meta property="og:title" content="Valentina &amp; Santiago · Nuestra Boda">
+  <meta property="og:description" content="19 de diciembre de 2026 · Toca para abrir tu invitación">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://TU-USUARIO.github.io/boda/assets/fotos/portada.jpg">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Mea+Culpa&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Íconos: Phosphor Icons (https://phosphoricons.com) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/light/style.css">
+  <link rel="stylesheet" href="styles.css?v=6">
+</head>
+<body class="bloqueado">
+
+  <!-- ============ PANTALLA DEL SOBRE (toda la pantalla es el sobre) ============ -->
+  <div id="pantalla-sobre" class="pantalla-sobre">
+    <button class="sobre" id="btn-abrir" type="button" aria-label="Abrir invitación">
+      <!-- interior del sobre (se ve al abrir la solapa) -->
+      <span class="sobre-interior"></span>
+
+      <!-- carta que sale al abrir -->
+      <span class="sobre-carta">
+        <img src="assets/monograma.png" alt="">
+        <span class="carta-mini">Nuestra boda</span>
+        <span class="carta-fecha">19 · 12 · 2026</span>
+      </span>
+
+      <!-- cuerpo del sobre -->
+      <span class="sobre-bolsillo"></span>
+
+      <!-- solapa con encaje y textos -->
+      <span class="sobre-solapa">
+        <span class="solapa-papel">
+          <span class="sobre-texto">
+            <span class="sobre-eyebrow">Una carta de amor de</span>
+            <span class="sobre-nombres"><span data-novia></span> &amp; <span data-novio></span></span>
+          </span>
+        </span>
+        <svg class="encaje" id="encaje" aria-hidden="true"></svg>
+      </span>
+
+      <!-- sello de cera -->
+      <span class="sello"><img src="assets/monograma.png" alt=""></span>
+
+      <span class="sobre-abajo">
+        <span class="sobre-para" id="sobre-para" hidden></span>
+        <span class="sobre-toca">Toca el sobre para abrirlo</span>
+      </span>
+    </button>
+  </div>
+
+  <!-- ============ INVITACIÓN ============ -->
+  <main id="invitacion">
+
+    <!-- Portada con video -->
+    <section class="portada">
+      <video class="portada-video" id="portada-video" muted loop playsinline preload="metadata"></video>
+      <div class="portada-velo"></div>
+      <div class="portada-texto">
+        <p class="eyebrow">Nuestra boda</p>
+        <h1 class="nombres">
+          <span data-novia></span>
+          <span class="amp">&amp;</span>
+          <span data-novio></span>
+        </h1>
+        <p class="portada-fecha">19 · Diciembre · 2026</p>
+      </div>
+      <a href="#anuncio" class="bajar" aria-label="Ver más"><i class="ph-light ph-caret-down"></i></a>
+    </section>
+
+    <!-- Anuncio (liso) -->
+    <section class="seccion" id="anuncio">
+      <div class="contenido">
+        <img class="monograma reveal" src="assets/monograma.png" alt="V & S" width="1254" height="1254">
+        <p class="saludo reveal" id="saludo" hidden></p>
+        <p class="texto-grande reveal">
+          Con gran alegría nos complace anunciar que hemos decidido unir nuestras vidas en matrimonio.
+        </p>
+        <p class="texto reveal">
+          Este día especial es el comienzo de un nuevo capítulo de nuestra historia, un capítulo que
+          queremos escribir junto a ustedes, nuestros amigos y familiares queridos.
+        </p>
+
+        <span class="separador reveal" aria-hidden="true"></span>
+
+        <!-- Fecha y cuenta regresiva -->
+        <p class="eyebrow reveal">Reserva la fecha</p>
+        <div class="calendario reveal">
+          <span class="cal-mes">Diciembre</span>
+          <div class="cal-fila">
+            <span class="cal-lado">Sábado</span>
+            <span class="cal-dia">19</span>
+            <span class="cal-lado">2026</span>
+          </div>
+        </div>
+        <div class="cuenta reveal" id="cuenta">
+          <div><span data-c="dias">0</span><small>Días</small></div>
+          <div><span data-c="horas">0</span><small>Horas</small></div>
+          <div><span data-c="min">0</span><small>Min</small></div>
+          <div><span data-c="seg">0</span><small>Seg</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ceremonia y recepción (fondo con video) -->
+    <section class="seccion con-fondo" data-fondo="eventos">
+      <div class="contenido eventos">
+        <article class="evento evento-arriba reveal">
+          <i class="ph-light ph-church icono"></i>
+          <h2 class="evento-titulo">Ceremonia</h2>
+          <p class="evento-hora"><i class="ph-light ph-clock"></i> <span data-ev="ceremonia.hora"></span></p>
+          <p class="evento-lugar" data-ev="ceremonia.lugar"></p>
+          <p class="evento-dir" data-ev="ceremonia.direccion"></p>
+          <a class="boton-linea" data-mapa="ceremonia" target="_blank" rel="noopener noreferrer">
+            <i class="ph-light ph-map-pin"></i> Ver ubicación
+          </a>
+        </article>
+
+        <article class="evento evento-abajo reveal">
+          <i class="ph-light ph-champagne icono"></i>
+          <h2 class="evento-titulo">Recepción</h2>
+          <p class="evento-hora"><i class="ph-light ph-clock"></i> <span data-ev="recepcion.hora"></span></p>
+          <p class="evento-lugar" data-ev="recepcion.lugar"></p>
+          <p class="evento-dir" data-ev="recepcion.direccion"></p>
+          <a class="boton-linea" data-mapa="recepcion" target="_blank" rel="noopener noreferrer">
+            <i class="ph-light ph-map-pin"></i> Ver ubicación
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Nuestra historia (fondo blanco) -->
+    <section class="seccion historia">
+      <div class="contenido">
+        <p class="eyebrow reveal">Nuestra historia</p>
+        <h2 class="titulo-script reveal">Así comenzó todo</h2>
+        <p class="texto reveal" id="historia-texto"></p>
+      </div>
+      <div class="marquee reveal" aria-label="Fotos de los novios">
+        <div class="marquee-pista" id="marquee-pista"></div>
+      </div>
+    </section>
+
+    <!-- Código de vestimenta (liso) -->
+    <section class="seccion vestimenta">
+      <!-- Onda que separa esta sección de "Nuestra historia" -->
+      <svg class="onda" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+        <path class="onda-relleno" d="M0,0H1440V38C1180,96 900,4 560,52C330,84 150,74 0,46Z"/>
+        <path class="onda-linea" d="M0,62C150,90 330,100 560,68C900,20 1180,112 1440,54"/>
+      </svg>
+      <div class="contenido">
+        <p class="eyebrow reveal">Código de vestimenta</p>
+        <h2 class="titulo-script reveal">Elegante formal</h2>
+        <p class="texto reveal">
+          Con cariño les pedimos <strong>evitar el color blanco</strong>, reservado para la novia.
+        </p>
+      </div>
+    </section>
+
+    <!-- Confirmación de asistencia (con fondo) -->
+    <section class="seccion con-fondo rsvp" id="rsvp" data-fondo="rsvp">
+      <div class="contenido">
+        <div class="tarjeta reveal">
+          <i class="ph-light ph-envelope-simple icono"></i>
+          <p class="eyebrow">Confirma tu asistencia</p>
+          <h2 class="titulo-script">¿Nos acompañas?</h2>
+          <p class="texto" id="rsvp-limite"></p>
+          <div class="rsvp-caja" id="rsvp-caja">
+            <p class="texto-suave">Cargando tu invitación…</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <div class="ornamento" aria-hidden="true"></div>
+      <p class="pie-nombres"><span data-novia></span> &amp; <span data-novio></span></p>
+      <p class="pie-fecha">19 · 12 · 2026</p>
+    </footer>
+  </main>
+
+  <script src="config.js?v=6"></script>
+  <script src="app.js?v=6"></script>
+</body>
+</html>
