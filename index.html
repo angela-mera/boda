@@ -12,7 +12,7 @@
   <meta property="og:title" content="Valentina &amp; Santiago · Nuestra Boda">
   <meta property="og:description" content="19 de diciembre de 2026 · Toca para abrir tu invitación">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://TU-USUARIO.github.io/boda/assets/fotos/portada.jpg">
+  <meta property="og:image" content="https://angela-mera.github.io/boda/assets/fotos/foto1.jpg">
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Mea+Culpa&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
   <!-- Íconos: Phosphor Icons (https://phosphoricons.com) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/light/style.css">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body class="bloqueado">
 
@@ -85,12 +85,13 @@
       <div class="contenido">
         <img class="monograma reveal" src="assets/monograma.png" alt="V & S" width="1254" height="1254">
         <p class="saludo reveal" id="saludo" hidden></p>
+        <a class="aviso-confirmado" id="aviso-confirmado" href="#rsvp" hidden></a>
         <p class="texto-grande reveal">
           Con gran alegría nos complace anunciar que hemos decidido unir nuestras vidas en matrimonio.
         </p>
         <p class="texto reveal">
           Este día especial es el comienzo de un nuevo capítulo de nuestra historia, un capítulo que
-          queremos escribir junto a ustedes, nuestros amigos y familiares queridos.
+          queremos escribir junto a <span data-singular="ti y a todos nuestros amigos y familiares queridos">ustedes, nuestros amigos y familiares queridos</span>.
         </p>
 
         <span class="separador reveal" aria-hidden="true"></span>
@@ -164,7 +165,7 @@
         <p class="eyebrow reveal">Código de vestimenta</p>
         <h2 class="titulo-script reveal">Elegante formal</h2>
         <p class="texto reveal">
-          Con cariño les pedimos <strong>evitar el color blanco</strong>, reservado para la novia.
+          Con cariño <span data-singular="te pedimos">les pedimos</span> <strong>evitar el color blanco</strong>, reservado para la novia.
         </p>
       </div>
     </section>
@@ -177,6 +178,11 @@
           <p class="eyebrow">Confirma tu asistencia</p>
           <h2 class="titulo-script">¿Nos acompañas?</h2>
           <p class="texto" id="rsvp-limite"></p>
+          <p class="nota-ninos">
+            Por motivos de seguridad y espacio, agradecemos que la asistencia de niños sea limitada a los casos
+            estrictamente necesarios. Los niños no contarán con puesto asignado, por lo que deberán permanecer en
+            todo momento junto a sus padres o acompañantes, quienes serán responsables de su cuidado.
+          </p>
           <div class="rsvp-caja" id="rsvp-caja">
             <p class="texto-suave">Cargando tu invitación…</p>
           </div>
@@ -191,7 +197,13 @@
     </footer>
   </main>
 
-  <script src="config.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <!-- Música de fondo: empieza al abrir el sobre; este botón la silencia -->
+  <audio id="musica" loop preload="auto"></audio>
+  <button class="boton-musica" id="btn-musica" type="button" aria-label="Silenciar música" aria-pressed="false" hidden>
+    <i class="ph-light ph-speaker-high"></i>
+  </button>
+
+  <script src="config.js?v=8"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

@@ -42,9 +42,9 @@ i[class^="ph"] { line-height: 1; }
    los calcula app.js según el tamaño de la pantalla.
    ========================================================= */
 .pantalla-sobre {
-  --oliva: #5C5B3B;
-  --oliva-oscuro: #4B4A2F;
-  --oliva-claro: #6E6D4B;
+  --oliva: #57603F;
+  --oliva-oscuro: #474F33;
+  --oliva-claro: #6A7352;
   --crema: #EDE4CF;
   --dorado-suave: #D9C6A0;
   --lado: 40vh;
@@ -560,6 +560,38 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 
 /* ---------- RSVP ---------- */
 .rsvp-caja { margin-top: 20px; text-align: left; }
+
+/* Nota sobre los niños */
+.nota-ninos {
+  margin: 18px 0 4px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--tinta);
+  background: var(--fondo);
+  border-radius: 0 12px 12px 0;
+  text-align: left;
+  font-size: .98rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--tinta-2);
+}
+.bloque-ninos .opciones { max-width: 100%; }
+.alergia input[type="number"] { max-width: 120px; }
+
+/* Aviso arriba cuando ya respondió */
+.aviso-confirmado {
+  display: inline-block;
+  margin: -6px 0 22px;
+  padding: 8px 16px;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  background: var(--blanco);
+  font-family: var(--sans);
+  font-size: .72rem;
+  letter-spacing: .06em;
+  color: var(--tinta);
+  text-decoration: none;
+}
+.aviso-confirmado:hover { border-color: var(--tinta); }
 .rsvp-hola { margin: 0; text-align: center; font-family: var(--script); font-size: 2.3rem; line-height: 1.2; }
 .rsvp-pases {
   margin: 4px 0 18px;
@@ -645,6 +677,39 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   cursor: pointer;
   font-size: 1rem;
 }
+
+/* ---------- Botón de música ---------- */
+.boton-musica {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 50;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .6);
+  border-radius: 50%;
+  background: rgba(26, 26, 26, .78);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 1.35rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+  transition: transform .2s ease, background .2s ease;
+}
+.boton-musica:active { transform: scale(.92); }
+.boton-musica:focus-visible { outline: 2px solid var(--tinta); outline-offset: 3px; }
+.boton-musica.sonando::after {          /* onda suave mientras suena */
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(26, 26, 26, .5);
+  animation: onda-musica 2s ease-out infinite;
+}
+@keyframes onda-musica { from { transform: scale(1); opacity: .8; } to { transform: scale(1.6); opacity: 0; } }
 
 /* ---------- Pie ---------- */
 .pie {

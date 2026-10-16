@@ -3,8 +3,8 @@
  * Pega este archivo en Extensiones > Apps Script de tu Google Sheet (ver README).
  */
 
-// ⚠️ Cambia esto por el enlace real de tu invitación publicada (termina en /)
-const SITE_URL = 'https://TU-USUARIO.github.io/boda/';
+// Enlace de la invitación publicada (termina en /)
+const SITE_URL = 'https://angela-mera.github.io/boda/';
 const FECHA_LIMITE = new Date('2026-12-01T23:59:59-05:00');
 const NOVIOS = 'Valentina & Santiago';
 
@@ -48,9 +48,9 @@ function prepararHojas() {
   let resp = ss.getSheetByName(HOJA_RESP);
   if (!resp) {
     resp = ss.insertSheet(HOJA_RESP);
-    resp.getRange(1, 1, 1, 6).setValues([['Fecha', 'Código', 'Invitación', 'Persona', '¿Asiste?', 'Alergias']]);
-    estilizarEncabezado(resp, 6);
-    resp.setColumnWidths(1, 6, 170);
+    resp.getRange(1, 1, 1, 7).setValues([['Fecha', 'Código', 'Invitación', 'Persona', '¿Asiste?', 'Alergias', 'Niños']]);
+    estilizarEncabezado(resp, 7);
+    resp.setColumnWidths(1, 7, 170);
   }
 
   let res = ss.getSheetByName(HOJA_RESUMEN);
@@ -72,8 +72,23 @@ function prepararHojas() {
     res.setColumnWidth(1, 230);
     res.setColumnWidth(2, 260);
   }
+  asegurarColumnaNinos();
 
   SpreadsheetApp.getUi().alert('Listo ✅\n\nLlena la hoja "Invitados" (columnas B y C) y luego usa 💌 Boda > 2. Generar códigos y enlaces.');
+}
+
+// Agrega la columna "Niños" y su total a hojas creadas con la versión anterior del código
+function asegurarColumnaNinos() {
+  const ss = SpreadsheetApp.getActive();
+  const resp = ss.getSheetByName(HOJA_RESP);
+  if (resp && !resp.getRange('G1').getValue()) {
+    resp.getRange('G1').setValue('Niños').setFontWeight('bold').setBackground('#EED9D4');
+  }
+  const res = ss.getSheetByName(HOJA_RESUMEN);
+  if (res && !res.getRange('A7').getValue()) {
+    res.getRange('A7').setValue('👶 Niños (sin puesto asignado)').setFontWeight('bold');
+    res.getRange('B7').setFormula('=SUM(Respuestas!G2:G)').setFontSize(14).setHorizontalAlignment('center');
+  }
 }
 
 function estilizarEncabezado(hoja, columnas) {
@@ -98,8 +113,12 @@ function generarEnlaces() {
     }
     const personas = listaPersonas(fila[C_PERSONAS - 1], nombre);
     const enlace = SITE_URL + '?i=' + codigo;
-    const texto = `¡Hola ${nombre}! 🤍 Con mucha ilusión queremos invitarte a nuestra boda. ` +
-      `Abre tu invitación aquí: ${enlace}\n\n${NOVIOS}`;
+    // Una persona → "te"; varias → "los" (ustedes)
+    const texto = personas.length === 1
+      ? `¡Hola ${nombre}! 🤍 Con mucha ilusión hemos decidido invitarte a nuestra boda. ` +
+        `Abre tu invitación aquí: ${enlace}\n\n${NOVIOS}`
+      : `¡Hola ${nombre}! 🤍 Con mucha ilusión hemos decidido invitarlos a nuestra boda. ` +
+        `Abran su invitación aquí: ${enlace}\n\n${NOVIOS}`;
     fila[C_CODIGO - 1] = codigo;
     fila[C_PASES - 1] = personas.length;
     fila[C_ENLACE - 1] = enlace;
@@ -143,15 +162,17 @@ function doGet(e) {
   if (!inv) return json({ ok: false, error: 'no_encontrada' });
 
   const respuestas = {};
+  let ninos = '';
   const hoja = SpreadsheetApp.getActive().getSheetByName(HOJA_RESP);
   if (hoja.getLastRow() > 1) {
-    hoja.getRange(2, 1, hoja.getLastRow() - 1, 6).getValues().forEach(f => {
+    hoja.getRange(2, 1, hoja.getLastRow() - 1, 7).getValues().forEach(f => {
       if (String(f[1]).toUpperCase() === codigo) {
         respuestas[f[3]] = { persona: f[3], asiste: f[4], alergias: String(f[5]).replace(/^'/, '') };
+        if (f[6] !== '' && ninos === '') ninos = Number(f[6]) || 0;
       }
     });
   }
-  return json({ ok: true, invitacion: inv.nombre, personas: inv.personas, respuestas });
+  return json({ ok: true, invitacion: inv.nombre, personas: inv.personas, respuestas, ninos });
 }
 
 function doPost(e) {
@@ -172,21 +193,27 @@ function doPost(e) {
       if (!r) return null;
       const asiste = r.asiste === 'Sí' ? 'Sí' : 'No';
       const alergias = asiste === 'Sí' ? seguro(String(r.alergias || '').slice(0, 200)) : '';
-      return [new Date(), inv.codigo, inv.nombre, persona, asiste, alergias];
+      return [new Date(), inv.codigo, inv.nombre, persona, asiste, alergias, ''];
     });
     if (filas.some(f => !f)) return json({ ok: false, error: 'incompleto' });
+
+    // Niños: un solo número por invitación, guardado en la primera fila
+    const algunoVa = filas.some(f => f[4] === 'Sí');
+    const ninos = algunoVa ? Math.min(10, Math.max(0, parseInt(datos.ninos, 10) || 0)) : 0;
+    filas[0][6] = ninos;
+    asegurarColumnaNinos();
 
     // Si ya había respondido, se reemplaza su respuesta anterior
     const hoja = SpreadsheetApp.getActive().getSheetByName(HOJA_RESP);
     for (let r = hoja.getLastRow(); r >= 2; r--) {
       if (String(hoja.getRange(r, 2).getValue()).toUpperCase() === inv.codigo) hoja.deleteRow(r);
     }
-    hoja.getRange(hoja.getLastRow() + 1, 1, filas.length, 6).setValues(filas);
+    hoja.getRange(hoja.getLastRow() + 1, 1, filas.length, 7).setValues(filas);
 
     const si = filas.filter(f => f[4] === 'Sí').length;
     SpreadsheetApp.getActive().getSheetByName(HOJA_INV)
       .getRange(inv.fila, C_ESTADO)
-      .setValue(`✓ ${si} asiste(n) · ✗ ${filas.length - si} no`);
+      .setValue(`✓ ${si} asiste(n) · ✗ ${filas.length - si} no` + (ninos ? ` · 👶 ${ninos} niño(s)` : ''));
 
     return json({ ok: true });
   } finally {

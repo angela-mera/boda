@@ -34,13 +34,12 @@ window.BODA = {
     'Entre risas, viajes y sueños compartidos, descubrimos que queríamos caminar juntos para siempre.',
 
   // Fotos del carrusel "Nuestra historia" (reemplaza por tus .jpg, idealmente verticales ~800px de alto)
+  // Si son pocas, se repiten solas para llenar la pantalla.
   fotos: [
-    'assets/fotos/foto1.svg',
-    'assets/fotos/foto2.svg',
-    'assets/fotos/foto3.svg',
-    'assets/fotos/foto4.svg',
-    'assets/fotos/foto5.svg',
-    'assets/fotos/foto6.svg'
+    'assets/fotos/foto1.jpg',
+    'assets/fotos/foto2.jpg',
+    'assets/fotos/foto3.jpg',
+    'assets/fotos/foto4.jpg'
   ],
 
   // Fondos de las secciones. Puede ser un video (.mp4, sin sonido, < 5 MB) o una imagen (.jpg ~1600px, < 400 KB).
@@ -53,6 +52,9 @@ window.BODA = {
   // Video de fondo de la portada (MP4, sin sonido, ideal < 3 MB). Si aún no existe, se muestra la imagen "poster".
   video: 'assets/video/326106.mp4',
   poster: '',                         // opcional: imagen que se ve mientras carga el video (ej. 'assets/fotos/portada.jpg')
+
+  // Canción de fondo (MP3, ideal < 5 MB). Suena en bucle al abrir el sobre. Vacío = sin música.
+  musica: 'assets/musica/cancion.mp3',
 
   // URL de la App web de Google Apps Script (ver README). Vacío = modo demostración.
   apiUrl: 'https://script.google.com/macros/s/AKfycbx92Z6gu0VCLB_7m59kkHpqoZcEUtE38QHBbyjJ5oBenLlNsuiIDj3wsE43fu6fMEk4YQ/exec'
