@@ -395,9 +395,10 @@
     const ok = el('div', { className: 'rsvp-ok' },
       el('div', { className: 'check', textContent: '✓' }),
       el('p', { className: 'rsvp-hola', textContent: '¡Gracias!' }),
-      el('p', { className: 'texto', textContent: algunoVa
-        ? `Ya recibimos ${tu} confirmación. ¡Nos vemos el 19 de diciembre!`
-        : `Ya recibimos ${tu} respuesta. ¡${esUna() ? 'Te' : 'Los'} extrañaremos!` }),
+      el('p', { className: 'texto' },
+        algunoVa ? `Ya recibimos ${tu} confirmación.` : `Ya recibimos ${tu} respuesta.`,
+        el('br'),
+        algunoVa ? '¡Nos vemos el 19 de diciembre!' : `¡${esUna() ? 'Te' : 'Los'} extrañaremos!`),
       el('p', { className: 'rsvp-pases', textContent: `Resumen de ${tu} respuesta` }),
       lista
     );

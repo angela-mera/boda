@@ -622,19 +622,25 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 }
 .opciones input:focus-visible + span { outline: 2px solid var(--tinta); outline-offset: 2px; }
 .opciones input[value="si"]:checked + span { background: var(--tinta); border-color: var(--tinta); color: var(--blanco); }
-.opciones input[value="no"]:checked + span { background: var(--fondo-2); border-color: var(--gris-claro); }
+/* "No podré ir": rojo muy suave */
+.opciones input[value="no"]:checked + span { background: #FBEFED; border-color: #C9776D; color: #A3443A; }
+/* En la pregunta de niños, Sí y No se marcan en negro */
+.bloque-ninos .opciones input:checked + span { background: var(--tinta); border-color: var(--tinta); color: var(--blanco); }
 
 .alergia { margin-top: 12px; }
 .alergia label { display: block; margin-bottom: 6px; font-size: .98rem; color: var(--gris); }
 .alergia input {
   width: 100%;
-  padding: 11px 14px;
+  padding: 10px 14px;
   border: 1px solid var(--linea);
   border-radius: 12px;
   background: var(--fondo);
-  font-family: var(--sans);
-  font-size: 16px;            /* evita el zoom automático en iPhone */
+  font-family: var(--serif);  /* misma letra de la pregunta */
+  font-size: 1.1rem;
+  font-size: max(16px, 1.1rem);   /* nunca menos de 16px: evita el zoom automático en iPhone */
+  color: var(--tinta);
 }
+.alergia input::placeholder { font-style: italic; color: var(--gris-claro); }
 .alergia input:focus { outline: none; border-color: var(--tinta); }
 
 .boton {
