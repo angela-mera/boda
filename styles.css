@@ -117,7 +117,6 @@ i[class^="ph"] { line-height: 1; }
   text-transform: uppercase;
   color: var(--gris);
 }
-.carta-fecha { font-size: .9rem; letter-spacing: .25em; color: var(--tinta-2); }
 
 /* Cuerpo del sobre */
 .sobre-bolsillo {
@@ -311,13 +310,6 @@ i[class^="ph"] { line-height: 1; }
   align-items: center;
 }
 .nombres .amp { font-size: .6em; color: var(--tinta-2); margin: -.05em 0; }
-.portada-fecha {
-  margin: 18px 0 0;
-  font-size: 1.05rem;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--tinta-2);
-}
 .bajar {
   position: absolute;
   bottom: max(22px, env(safe-area-inset-bottom));
