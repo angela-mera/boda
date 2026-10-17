@@ -720,6 +720,20 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 .pie-nombres { margin: 0; font-family: var(--script); font-size: 2.4rem; line-height: 1.2; }
 .pie-fecha { margin: 4px 0 0; letter-spacing: .3em; color: var(--gris-claro); }
 
+/* ---------- Centrado de textos con letras espaciadas ----------
+   El espaciado (letter-spacing) también se agrega después de la última letra,
+   lo que corre el texto a la izquierda. Una sangría igual lo compensa. */
+.eyebrow { text-indent: .38em; }
+.sobre-eyebrow { text-indent: .32em; }
+.sobre-toca { text-indent: .3em; }
+.carta-mini { text-indent: .35em; }
+.cal-mes { text-indent: .4em; }
+.cal-lado { text-indent: .25em; }
+.cuenta small { text-indent: .2em; }
+.rsvp-pases { text-indent: .2em; }
+.boton { text-indent: .25em; }
+.pie-fecha { text-indent: .3em; }
+
 /* ---------- Animación al hacer scroll ---------- */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s cubic-bezier(.2, .7, .3, 1); }
 .reveal.visible { opacity: 1; transform: none; }

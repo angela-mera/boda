@@ -234,7 +234,7 @@
   const DEMOS = {
     DEMO: { ok: true, invitacion: 'Ana y Luis', personas: ['Ana', 'Luis'], menores: [], respuestas: {} },
     DEMO1: { ok: true, invitacion: 'Julián Torres', personas: ['Julián Torres'], menores: [], respuestas: {} },
-    DEMO2: { ok: true, invitacion: 'Familia Pérez', personas: ['Ana', 'Luis', 'Pedro'], menores: ['Lucía'], respuestas: {} }
+    DEMO2: { ok: true, invitacion: 'Familia Pérez Cardona', personas: ['Ana María', 'Luis Carlos', 'Pedro'], menores: ['Lucía'], respuestas: {} }
   };
 
   async function api(metodo, datos) {
@@ -267,6 +267,7 @@
   const menores = () => invitacion.menores || [];
   const todos = () => [...adultos(), ...menores()];
   const esUna = () => !!invitacion && todos().length === 1;
+  const etiquetaNinos = () => (menores().length === 1 ? 'Niño(a) invitado(a)' : 'Niños(as) invitados(as)');
 
   function personalizar(inv) {
     invitacion = inv;
@@ -324,7 +325,7 @@
     adultos().forEach((nombre, i) => { ids.push(`a${i}`); form.append(bloquePersona(nombre, `a${i}`, false)); });
     if (menores().length) {
       form.append(el('p', { className: 'rsvp-pases rsvp-subtitulo',
-        textContent: menores().length === 1 ? 'Niño invitado · sin puesto asignado' : 'Niños invitados · sin puesto asignado' }));
+        textContent: etiquetaNinos() }));
       menores().forEach((nombre, j) => { ids.push(`n${j}`); form.append(bloquePersona(nombre, `n${j}`, true)); });
     }
 
@@ -399,7 +400,7 @@
       lista
     );
     if (listaNinos.children.length) {
-      ok.append(el('p', { className: 'rsvp-pases rsvp-subtitulo', textContent: menores().length === 1 ? 'Niño invitado' : 'Niños invitados' }), listaNinos);
+      ok.append(el('p', { className: 'rsvp-pases rsvp-subtitulo', textContent: etiquetaNinos() }), listaNinos);
     }
     if (!cerrado()) {
       const cambiar = el('button', { className: 'enlace', type: 'button', textContent: esUna() ? '¿Deseas modificar tu respuesta?' : '¿Desean modificar su respuesta?' });
