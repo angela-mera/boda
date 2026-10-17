@@ -81,13 +81,22 @@
     fig.className = 'foto';
     fig.style.margin = '0';
     if (i >= B.fotos.length) fig.setAttribute('aria-hidden', 'true');
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = i < B.fotos.length ? `Foto ${i + 1} de ${B.novia} y ${B.novio}` : '';
-    img.loading = 'lazy';
-    fig.appendChild(img);
+    let medio;
+    if (esVideo(src)) {
+      // Videos del carrusel: sin sonido y en bucle (solo se reproducen mientras se ven)
+      medio = Object.assign(document.createElement('video'), { muted: true, loop: true, playsInline: true, preload: 'metadata', src });
+      medio.setAttribute('muted', '');
+      medio.setAttribute('playsinline', '');
+      videosFondo.observe(medio);
+    } else {
+      medio = Object.assign(document.createElement('img'), { src, loading: 'lazy' });
+      medio.alt = i < B.fotos.length ? `Foto ${i + 1} de ${B.novia} y ${B.novio}` : '';
+    }
+    fig.appendChild(medio);
     pista.appendChild(fig);
   });
+  // Velocidad constante sin importar cuántas fotos haya: ~8 s por foto
+  pista.style.animationDuration = `${tanda.length * 8}s`;
 
   /* ---------------- Sobre ---------------- */
   const pantalla = $('#pantalla-sobre');

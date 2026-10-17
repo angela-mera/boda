@@ -527,7 +527,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   rotate: -2deg;
 }
 .foto:nth-child(even) { rotate: 2deg; translate: 0 10px; }
-.foto img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2px; background: var(--fondo-2); }
+.foto img, .foto video { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2px; background: var(--fondo-2); }
 @keyframes desplazar { to { transform: translateX(calc(-50% - 9px)); } }
 
 /* ---------- Vestimenta ---------- */

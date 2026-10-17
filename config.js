@@ -34,10 +34,11 @@ window.BODA = {
     'Entre risas, viajes y sueños compartidos, descubrimos que queríamos caminar juntos para siempre.',
 
   // Fotos del carrusel "Nuestra historia" (reemplaza por tus .jpg, idealmente verticales ~800px de alto)
-  // Si son pocas, se repiten solas para llenar la pantalla.
+  // También acepta videos cortos .mp4 (sin sonido, < 3 MB). Si son pocas, se repiten solas para llenar la pantalla.
   fotos: [
     'assets/fotos/foto1.jpg',
     'assets/fotos/foto2.jpg',
+    'assets/fotos/video1.mp4',
     'assets/fotos/foto3.jpg',
     'assets/fotos/foto4.jpg'
   ],
