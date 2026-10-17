@@ -301,23 +301,23 @@
       return el('label', {}, input, el('span', { textContent: texto }));
     };
     return el('div', { className: nino ? 'persona bloque-ninos' : 'persona' },
-      el('p', { className: 'persona-nombre', textContent: nino ? `¿Asistirá ${nombre}?` : nombre }),
+      el('p', { className: 'persona-nombre', textContent: nombre }),
       el('div', { className: 'opciones', role: 'radiogroup', ariaLabel: `Asistencia de ${nombre}` },
-        nino ? opcion('si', 'Sí') : opcion('si', 'Asistiré'),
-        nino ? opcion('no', 'No') : opcion('no', 'No podré ir')),
+        nino ? opcion('si', 'Asistirá') : opcion('si', 'Asistiré'),
+        nino ? opcion('no', 'No asistirá') : opcion('no', 'No podré ir')),
       alergia
     );
   }
 
   function pintarFormulario() {
     caja.style.textAlign = '';
-    const nA = adultos().length;
+    const total = todos().length;
     const form = el('form', { noValidate: true });
     form.append(
       el('p', { className: 'rsvp-hola', textContent: invitacion.invitacion }),
       el('p', { className: 'rsvp-pases', textContent: esUna()
-        ? 'Hemos reservado 1 lugar para ti'
-        : `Hemos reservado ${nA} ${nA === 1 ? 'lugar' : 'lugares'} para ustedes` })
+        ? 'Hemos reservado 1 asiento para ti'
+        : `Hemos reservado ${total} asientos para ustedes` })
     );
 
     // Cada persona tiene un id: a0, a1… (adultos) y n0, n1… (niños)

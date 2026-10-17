@@ -40,7 +40,9 @@ window.BODA = {
     'assets/fotos/foto2.jpg',
     'assets/fotos/video1.mp4',
     'assets/fotos/foto3.jpg',
-    'assets/fotos/foto4.jpg'
+    'assets/fotos/foto4.jpg',
+    'assets/fotos/foto5.jpg',
+    'assets/fotos/foto6.jpg'
   ],
 
   // Fondos de las secciones. Puede ser un video (.mp4, sin sonido, < 5 MB) o una imagen (.jpg ~1600px, < 400 KB).

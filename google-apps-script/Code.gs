@@ -110,7 +110,7 @@ function crearResumen(res) {
     [6, '✗ No asisten', '=COUNTIF(Respuestas!E2:E,"No")', '#F4CCCC'],
     [8, 'Personas sin responder', '=C4-C5-C6', null],
     [9, 'Invitaciones sin responder', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"")', null],
-    [11, 'Niños (sin puesto asignado)', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null]
+    [11, 'Niños que asisten', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null]
   ];
   filas.forEach(([fila, etiqueta, formula, color]) => {
     res.getRange(fila, 2).setValue(etiqueta);
