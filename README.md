@@ -41,14 +41,14 @@ Mientras `apiUrl` esté vacío en `config.js`, la página funciona en **modo dem
 
 | Hoja | Para qué sirve |
 |---|---|
-| **Invitados** | Llenas la columna B (cómo se muestra, por ejemplo "Familia Pérez") y la C (personas separadas por coma: `Carlos, Marta, Sofía`). |
+| **Invitados** | Llenas la columna B (cómo se muestra, por ejemplo "Familia Pérez"), la C (adultos separados por coma: `Carlos, Marta`) y la D (niños separados por coma: `Sofía`; vacía si no hay niños). |
 | **Respuestas** | Se llena sola. Una fila por persona con Sí o No y sus alergias. |
 | **Resumen** | Totales de cuántos asisten, cuántos no y cuántos faltan, más la lista de alergias. |
 
 Después de llenar los invitados, recarga la hoja y usa el menú **💌 Boda → 2. Generar códigos y enlaces**. Ese menú llena el código, los pases, el enlace personal y un **enlace de WhatsApp listo para enviar**.
 
 - Si agregas invitados después, vuelve a usar el mismo menú. Los códigos que ya existen no cambian.
-- Los **pases** son la cantidad de nombres en la columna C. Para un acompañante sin nombre, escribe "Acompañante".
+- Los **pases** son la suma de adultos (columna C) y niños (columna D). Para un acompañante sin nombre, escribe "Acompañante". Cada niño aparece con su nombre en la invitación ("¿Asistirá Sofía?"), así nadie puede agregar niños que no estén en la lista.
 - Si alguien confirma otra vez, su respuesta anterior se reemplaza.
 - Después del **1 de diciembre** ya no se aceptan confirmaciones.
 

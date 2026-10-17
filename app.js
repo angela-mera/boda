@@ -229,10 +229,12 @@
   const cerrado = () => Date.now() > new Date(B.fechaLimite).getTime();
   let invitacion = null;
 
-  // Invitaciones de prueba: ?i=DEMO (pareja) y ?i=DEMO1 (una persona). No guardan nada.
+  // Invitaciones de prueba (no guardan nada):
+  //   ?i=DEMO  → pareja sin niños · ?i=DEMO1 → una persona · ?i=DEMO2 → familia con una niña
   const DEMOS = {
-    DEMO: { ok: true, invitacion: 'Ana y Luis', personas: ['Ana', 'Luis'], respuestas: {}, ninos: '' },
-    DEMO1: { ok: true, invitacion: 'Julián Torres', personas: ['Julián Torres'], respuestas: {}, ninos: '' }
+    DEMO: { ok: true, invitacion: 'Ana y Luis', personas: ['Ana', 'Luis'], menores: [], respuestas: {} },
+    DEMO1: { ok: true, invitacion: 'Julián Torres', personas: ['Julián Torres'], menores: [], respuestas: {} },
+    DEMO2: { ok: true, invitacion: 'Familia Pérez', personas: ['Ana', 'Luis', 'Pedro'], menores: ['Lucía'], respuestas: {} }
   };
 
   async function api(metodo, datos) {
@@ -241,7 +243,6 @@
       await new Promise(r => setTimeout(r, 600));
       if (metodo === 'GET') return demo || { ok: false, error: 'no_encontrada' };
       datos.respuestas.forEach(r => (demo.respuestas[r.persona] = r));
-      demo.ninos = datos.ninos;
       return { ok: true };
     }
     const res = metodo === 'GET'
@@ -261,12 +262,16 @@
     caja.style.textAlign = 'center';
   }
 
-  const esUna = () => !!invitacion && invitacion.personas.length === 1;
-  const ninosTexto = n => (n > 0 ? `${n} ${n === 1 ? 'niño' : 'niños'}` : 'sin niños');
+  // Adultos y niños de la invitación, tal como están en la hoja de Google
+  const adultos = () => invitacion.personas;
+  const menores = () => invitacion.menores || [];
+  const todos = () => [...adultos(), ...menores()];
+  const esUna = () => !!invitacion && todos().length === 1;
 
   function personalizar(inv) {
+    invitacion = inv;
     // Invitación para una sola persona: los textos pasan a singular (ustedes → ti)
-    if (inv.personas.length === 1) $$('[data-singular]').forEach(e => (e.textContent = e.dataset.singular));
+    if (esUna()) $$('[data-singular]').forEach(e => (e.textContent = e.dataset.singular));
     const para = $('#sobre-para');
     if (para) {
       para.replaceChildren('Para', el('strong', { textContent: inv.invitacion }));
@@ -277,108 +282,89 @@
     saludo.hidden = false;
   }
 
+  // Bloque de una persona: nombre (o pregunta), opciones y campo de alergias
+  function bloquePersona(nombre, id, nino) {
+    const previa = invitacion.respuestas[nombre] || {};
+    const alergia = el('div', { className: 'alergia', hidden: previa.asiste !== 'Sí' },
+      el('label', { htmlFor: `alergia-${id}`, textContent: '¿Es alérgico(a) a alguna comida o bebida?' }),
+      el('input', {
+        type: 'text', id: `alergia-${id}`, maxLength: 200,
+        placeholder: 'Ej: maní, salsas… (opcional)',
+        value: previa.alergias || ''
+      })
+    );
+    const opcion = (valor, texto) => {
+      const input = el('input', { type: 'radio', name: id, value: valor });
+      input.checked = (valor === 'si' && previa.asiste === 'Sí') || (valor === 'no' && previa.asiste === 'No');
+      input.addEventListener('change', () => (alergia.hidden = valor !== 'si'));
+      return el('label', {}, input, el('span', { textContent: texto }));
+    };
+    return el('div', { className: nino ? 'persona bloque-ninos' : 'persona' },
+      el('p', { className: 'persona-nombre', textContent: nino ? `¿Asistirá ${nombre}?` : nombre }),
+      el('div', { className: 'opciones', role: 'radiogroup', ariaLabel: `Asistencia de ${nombre}` },
+        nino ? opcion('si', 'Sí') : opcion('si', 'Asistiré'),
+        nino ? opcion('no', 'No') : opcion('no', 'No podré ir')),
+      alergia
+    );
+  }
+
   function pintarFormulario() {
     caja.style.textAlign = '';
-    const n = invitacion.personas.length;
+    const nA = adultos().length;
     const form = el('form', { noValidate: true });
     form.append(
       el('p', { className: 'rsvp-hola', textContent: invitacion.invitacion }),
-      el('p', { className: 'rsvp-pases', textContent: n === 1 ? 'Hemos reservado 1 lugar para ti' : `Hemos reservado ${n} lugares para ustedes` })
+      el('p', { className: 'rsvp-pases', textContent: esUna()
+        ? 'Hemos reservado 1 lugar para ti'
+        : `Hemos reservado ${nA} ${nA === 1 ? 'lugar' : 'lugares'} para ustedes` })
     );
 
-    invitacion.personas.forEach((nombre, i) => {
-      const previa = invitacion.respuestas[nombre] || {};
-      const alergiaInput = el('input', {
-        type: 'text', id: `alergia-${i}`, maxLength: 200, 
-        placeholder: 'Ej: maní, salsas… (opcional)',
-        value: previa.alergias || ''
-      });
-      const alergia = el('div', { className: 'alergia', hidden: previa.asiste !== 'Sí' },
-        el('label', { htmlFor: `alergia-${i}`, textContent: '¿Es alérgico(a) a alguna comida o bebida?' }),
-        alergiaInput
-      );
-      const opcion = (valor, texto) => {
-        const input = el('input', { type: 'radio', name: `p${i}`, value: valor });
-        if ((valor === 'si' && previa.asiste === 'Sí') || (valor === 'no' && previa.asiste === 'No')) input.checked = true;
-        input.addEventListener('change', () => (alergia.hidden = valor !== 'si'));
-        return el('label', {}, input, el('span', { textContent: texto }));
-      };
-      form.append(el('div', { className: 'persona' },
-        el('p', { className: 'persona-nombre', textContent: nombre }),
-        el('div', { className: 'opciones', role: 'radiogroup', ariaLabel: `Asistencia de ${nombre}` },
-          opcion('si', 'Asistiré'), opcion('no', 'No podré ir')),
-        alergia
-      ));
-    });
-
-    // ¿Vienen niños? Solo se pregunta si al menos una persona asiste.
-    const ninosPrevios = Number(invitacion.ninos) || 0;
-    const yaRespondioNinos = invitacion.ninos !== undefined && invitacion.ninos !== '';
-    const cantidad = el('input', {
-      type: 'number', id: 'ninos-cantidad', min: 1, max: 10, inputMode: 'numeric',
-      value: ninosPrevios || 1
-    });
-    const cuantos = el('div', { className: 'alergia', hidden: !ninosPrevios },
-      el('label', { htmlFor: 'ninos-cantidad', textContent: '¿Cuántos niños?' }), cantidad);
-    const opcionNinos = (valor, texto) => {
-      const input = el('input', { type: 'radio', name: 'ninos', value: valor });
-      input.checked = valor === 'si' ? ninosPrevios > 0 : yaRespondioNinos && ninosPrevios === 0;
-      input.addEventListener('change', () => (cuantos.hidden = valor !== 'si'));
-      return el('label', {}, input, el('span', { textContent: texto }));
-    };
-    const bloqueNinos = el('div', { className: 'persona bloque-ninos' },
-      el('p', { className: 'persona-nombre', textContent: esUna() ? '¿Vendrás con niños?' : '¿Vendrán con niños?' }),
-      el('div', { className: 'opciones' }, opcionNinos('no', 'No'), opcionNinos('si', 'Sí')),
-      cuantos
-    );
-    const algunoAsiste = () => invitacion.personas.some((_, i) => form.querySelector(`input[name="p${i}"][value="si"]:checked`));
-    const revisarNinos = () => (bloqueNinos.hidden = !algunoAsiste());
-    form.addEventListener('change', revisarNinos);
+    // Cada persona tiene un id: a0, a1… (adultos) y n0, n1… (niños)
+    const ids = [];
+    adultos().forEach((nombre, i) => { ids.push(`a${i}`); form.append(bloquePersona(nombre, `a${i}`, false)); });
+    if (menores().length) {
+      form.append(el('p', { className: 'rsvp-pases rsvp-subtitulo',
+        textContent: menores().length === 1 ? 'Niño invitado · sin puesto asignado' : 'Niños invitados · sin puesto asignado' }));
+      menores().forEach((nombre, j) => { ids.push(`n${j}`); form.append(bloquePersona(nombre, `n${j}`, true)); });
+    }
 
     const error = el('p', { className: 'rsvp-error', hidden: true });
     const boton = el('button', { className: 'boton', type: 'submit', textContent: 'Confirmar asistencia' });
-    form.append(bloqueNinos, boton, error);
-    revisarNinos();
+    form.append(boton, error);
 
     form.addEventListener('submit', async ev => {
       ev.preventDefault();
-      const respuestas = invitacion.personas.map((persona, i) => {
-        const marcado = form.querySelector(`input[name="p${i}"]:checked`);
+      const respuestas = todos().map((persona, k) => {
+        const id = ids[k];
+        const marcado = form.querySelector(`input[name="${id}"]:checked`);
         return marcado && {
           persona,
           asiste: marcado.value === 'si' ? 'Sí' : 'No',
-          alergias: marcado.value === 'si' ? form.querySelector(`#alergia-${i}`).value.trim() : ''
+          alergias: marcado.value === 'si' ? form.querySelector(`#alergia-${id}`).value.trim() : ''
         };
       });
+      const fallo = texto => { error.textContent = texto; error.hidden = false; };
       if (respuestas.some(r => !r)) {
-        error.textContent = esUna() ? 'Por favor indica si asistirás.' : 'Por favor indica si asistirá cada persona.';
-        error.hidden = false;
-        return;
+        return fallo(esUna() ? 'Por favor indica si asistirás.' : 'Por favor responde por cada persona.');
       }
-      let ninos = 0;
-      if (algunoAsiste()) {
-        const marcado = form.querySelector('input[name="ninos"]:checked');
-        if (!marcado) {
-          error.textContent = esUna() ? 'Por favor indica si vendrás con niños.' : 'Por favor indica si vendrán con niños.';
-          error.hidden = false;
-          return;
-        }
-        ninos = marcado.value === 'si' ? Math.min(10, Math.max(1, parseInt(cantidad.value, 10) || 1)) : 0;
+      // Los niños solo pueden ir acompañados de al menos un adulto de la invitación
+      const vaUnAdulto = respuestas.slice(0, adultos().length).some(r => r.asiste === 'Sí');
+      const vaUnNino = respuestas.slice(adultos().length).some(r => r.asiste === 'Sí');
+      if (vaUnNino && !vaUnAdulto) {
+        return fallo('Los niños deben asistir acompañados de un adulto de la invitación.');
       }
       error.hidden = true;
       boton.disabled = true;
       boton.textContent = 'Enviando…';
       try {
-        const r = await api('POST', { i: codigo, respuestas, ninos });
+        const r = await api('POST', { i: codigo, respuestas });
         if (!r.ok) throw new Error(r.error);
         respuestas.forEach(x => (invitacion.respuestas[x.persona] = x));
-        invitacion.ninos = ninos;
         pintarGracias();
       } catch (e) {
-        error.textContent = e.message === 'cerrado'
+        fallo(e.message === 'cerrado'
           ? 'El plazo para confirmar ya terminó.'
-          : 'No pudimos enviar tu respuesta. Revisa tu conexión e inténtalo de nuevo.';
-        error.hidden = false;
+          : 'No pudimos enviar tu respuesta. Revisa tu conexión e inténtalo de nuevo.');
         boton.disabled = false;
         boton.textContent = 'Confirmar asistencia';
       }
@@ -389,17 +375,18 @@
 
   function pintarGracias() {
     caja.style.textAlign = '';
-    const lista = el('ul', { className: 'rsvp-resumen' });
-    invitacion.personas.forEach(p => {
+    const linea = p => {
       const r = invitacion.respuestas[p];
-      if (!r) return;
+      if (!r) return null;
       const extra = r.alergias ? ` · Alergias: ${r.alergias}` : '';
-      lista.append(el('li', { textContent: `${r.asiste === 'Sí' ? '✓' : '✗'}  ${p} — ${r.asiste === 'Sí' ? 'Asistirá' : 'No asistirá'}${extra}` }));
-    });
-    const algunoVa = invitacion.personas.some(p => invitacion.respuestas[p]?.asiste === 'Sí');
-    if (algunoVa && invitacion.ninos !== undefined && invitacion.ninos !== '') {
-      lista.append(el('li', { textContent: `Niños: ${ninosTexto(Number(invitacion.ninos) || 0)}` }));
-    }
+      return el('li', { textContent: `${r.asiste === 'Sí' ? '✓' : '✗'}  ${p} — ${r.asiste === 'Sí' ? 'Asistirá' : 'No asistirá'}${extra}` });
+    };
+    const lista = el('ul', { className: 'rsvp-resumen' });
+    adultos().forEach(p => { const li = linea(p); if (li) lista.append(li); });
+    const listaNinos = el('ul', { className: 'rsvp-resumen' });
+    menores().forEach(p => { const li = linea(p); if (li) listaNinos.append(li); });
+
+    const algunoVa = todos().some(p => invitacion.respuestas[p]?.asiste === 'Sí');
     const tu = esUna() ? 'tu' : 'su';
     const ok = el('div', { className: 'rsvp-ok' },
       el('div', { className: 'check', textContent: '✓' }),
@@ -411,6 +398,9 @@
       el('p', { className: 'rsvp-pases', textContent: `Resumen de ${tu} respuesta` }),
       lista
     );
+    if (listaNinos.children.length) {
+      ok.append(el('p', { className: 'rsvp-pases rsvp-subtitulo', textContent: menores().length === 1 ? 'Niño invitado' : 'Niños invitados' }), listaNinos);
+    }
     if (!cerrado()) {
       const cambiar = el('button', { className: 'enlace', type: 'button', textContent: esUna() ? '¿Deseas modificar tu respuesta?' : '¿Desean modificar su respuesta?' });
       cambiar.addEventListener('click', pintarFormulario);
@@ -430,9 +420,8 @@
         mensaje('No encontramos tu invitación. Verifica el enlace que te enviamos.');
         return;
       }
-      invitacion = r;
       personalizar(r);
-      const respondio = r.personas.every(p => r.respuestas[p]);
+      const respondio = todos().every(p => r.respuestas[p]);
       if (respondio) {
         pintarGracias();
         const aviso = $('#aviso-confirmado');

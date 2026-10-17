@@ -561,13 +561,13 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   background: var(--fondo);
   border-radius: 0 12px 12px 0;
   text-align: left;
-  font-size: .98rem;
+  font-size: 1.08rem;
   font-style: italic;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--tinta-2);
 }
 .bloque-ninos .opciones { max-width: 100%; }
-.alergia input[type="number"] { max-width: 120px; }
+.rsvp-subtitulo { margin: 22px 0 4px; }
 
 /* Aviso arriba cuando ya respondió */
 .aviso-confirmado {
