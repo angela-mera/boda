@@ -21,6 +21,7 @@ function onOpen() {
     .createMenu('💌 Boda')
     .addItem('1. Preparar hojas', 'prepararHojas')
     .addItem('2. Generar códigos y enlaces', 'generarEnlaces')
+    .addItem('3. Rehacer resumen', 'rehacerResumen')
     .addToUi();
 }
 
@@ -53,42 +54,58 @@ function prepararHojas() {
     resp.setColumnWidths(1, 7, 170);
   }
 
-  let res = ss.getSheetByName(HOJA_RESUMEN);
-  if (!res) {
-    res = ss.insertSheet(HOJA_RESUMEN, 0);
-    const filas = [
-      ['Invitaciones', '=COUNTA(Invitados!B2:B)'],
-      ['Personas invitadas', '=SUM(Invitados!D2:D)'],
-      ['✓ Asisten', '=COUNTIF(Respuestas!E2:E,"Sí")'],
-      ['✗ No asisten', '=COUNTIF(Respuestas!E2:E,"No")'],
-      ['Personas sin responder', '=B2-B3-B4'],
-      ['Invitaciones sin responder', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!G2:G,"")']
-    ];
-    res.getRange(1, 1, filas.length, 2).setValues(filas);
-    res.getRange('A1:A6').setFontWeight('bold');
-    res.getRange('B1:B6').setFontSize(14).setHorizontalAlignment('center');
-    res.getRange('A8').setValue('Alergias reportadas').setFontWeight('bold');
-    res.getRange('A9').setFormula('=IFERROR(FILTER(Respuestas!D2:F,Respuestas!F2:F<>""),"Ninguna por ahora")');
-    res.setColumnWidth(1, 230);
-    res.setColumnWidth(2, 260);
-  }
+  if (!ss.getSheetByName(HOJA_RESUMEN)) crearResumen(ss.insertSheet(HOJA_RESUMEN, 0));
   asegurarColumnaNinos();
 
   SpreadsheetApp.getUi().alert('Listo ✅\n\nLlena la hoja "Invitados" (columnas B y C) y luego usa 💌 Boda > 2. Generar códigos y enlaces.');
 }
 
-// Agrega la columna "Niños" y su total a hojas creadas con la versión anterior del código
+// Agrega la columna "Niños" a hojas creadas con la versión anterior del código
 function asegurarColumnaNinos() {
-  const ss = SpreadsheetApp.getActive();
-  const resp = ss.getSheetByName(HOJA_RESP);
+  const resp = SpreadsheetApp.getActive().getSheetByName(HOJA_RESP);
   if (resp && !resp.getRange('G1').getValue()) {
     resp.getRange('G1').setValue('Niños').setFontWeight('bold').setBackground('#EED9D4');
   }
-  const res = ss.getSheetByName(HOJA_RESUMEN);
-  if (res && !res.getRange('A7').getValue()) {
-    res.getRange('A7').setValue('👶 Niños (sin puesto asignado)').setFontWeight('bold');
-    res.getRange('B7').setFormula('=SUM(Respuestas!G2:G)').setFontSize(14).setHorizontalAlignment('center');
-  }
+}
+
+// Menú "3. Rehacer resumen": borra el contenido de la pestaña Resumen y la vuelve a armar
+function rehacerResumen() {
+  const ss = SpreadsheetApp.getActive();
+  crearResumen(ss.getSheetByName(HOJA_RESUMEN) || ss.insertSheet(HOJA_RESUMEN, 0));
+  SpreadsheetApp.getUi().alert('Resumen actualizado ✅');
+}
+
+// Pestaña Resumen: etiqueta en la columna B y total en la C, cada fila en su recuadro
+function crearResumen(res) {
+  res.clear();
+  const filas = [
+    // fila, etiqueta, fórmula, color de fondo
+    [2, 'Total Invitaciones Enviadas', '=COUNTA(Invitados!B2:B)', null],
+    [4, 'Total Personas invitadas', '=SUM(Invitados!D2:D)', null],
+    [5, '✓ Asisten', '=COUNTIF(Respuestas!E2:E,"Sí")', '#D9EAD3'],
+    [6, '✗ No asisten', '=COUNTIF(Respuestas!E2:E,"No")', '#F4CCCC'],
+    [8, 'Personas sin responder', '=C4-C5-C6', null],
+    [9, 'Invitaciones sin responder', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!G2:G,"")', null],
+    [11, 'Niños (sin puesto asignado)', '=SUM(Respuestas!G2:G)', null]
+  ];
+  filas.forEach(([fila, etiqueta, formula, color]) => {
+    res.getRange(fila, 2).setValue(etiqueta);
+    res.getRange(fila, 3).setFormula(formula).setHorizontalAlignment('center').setFontWeight('bold');
+    const recuadro = res.getRange(fila, 2, 1, 2).setBorder(true, true, true, true, true, false);
+    if (color) recuadro.setBackground(color);
+  });
+
+  // Alergias: una línea por persona, "Nombre — alergia"
+  res.getRange('B13').setValue('Alergias reportadas').setFontWeight('bold')
+    .setBorder(true, true, true, true, false, false);
+  res.getRange('B14')
+    .setFormula('=IFERROR(FILTER(Respuestas!D2:D&" — "&Respuestas!F2:F,Respuestas!F2:F<>""),"Ninguna por ahora")')
+    .setBorder(true, true, true, true, false, false);
+
+  res.getRange('B2:C14').setFontSize(11).setVerticalAlignment('middle');
+  res.setColumnWidth(1, 40);
+  res.setColumnWidth(2, 230);
+  res.setColumnWidth(3, 140);
 }
 
 function estilizarEncabezado(hoja, columnas) {
@@ -215,7 +232,7 @@ function doPost(e) {
     const si = filas.filter(f => f[4] === 'Sí').length;
     SpreadsheetApp.getActive().getSheetByName(HOJA_INV)
       .getRange(inv.fila, C_ESTADO)
-      .setValue(`✓ ${si} asiste(n) · ✗ ${filas.length - si} no` + (ninos ? ` · 👶 ${ninos} niño(s)` : ''));
+      .setValue(`✓ ${si} asiste(n) · ✗ ${filas.length - si} no` + (ninos ? ` · ${ninos} niño(s)` : ''));
 
     return json({ ok: true });
   } finally {
