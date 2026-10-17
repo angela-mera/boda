@@ -89,14 +89,51 @@
       medio.setAttribute('playsinline', '');
       videosFondo.observe(medio);
     } else {
-      medio = Object.assign(document.createElement('img'), { src, loading: 'lazy' });
+      medio = Object.assign(document.createElement('img'), { src, loading: 'lazy', draggable: false });
       medio.alt = i < B.fotos.length ? `Foto ${i + 1} de ${B.novia} y ${B.novio}` : '';
     }
     fig.appendChild(medio);
     pista.appendChild(fig);
   });
-  // Velocidad constante sin importar cuántas fotos haya: ~8 s por foto
-  pista.style.animationDuration = `${tanda.length * 8}s`;
+
+  // Movimiento del carrusel: avanza solo (~8 s por foto). Con el dedo o el mouse
+  // se puede arrastrar a los lados; al soltar, sigue avanzando solo.
+  // El desplazamiento vertical de la página no se bloquea (touch-action: pan-y).
+  const marquee = pista.parentElement;
+  const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let x = 0, periodo = 0, velocidad = 0, arrastrando = false, ultimoX = 0, antes = 0;
+  function medirCarrusel() {
+    periodo = pista.children[tanda.length].offsetLeft - pista.children[0].offsetLeft; // ancho de una tanda
+    velocidad = (pista.children[1].offsetLeft - pista.children[0].offsetLeft) / 8;   // px por segundo
+  }
+  function moverCarrusel(t) {
+    const dt = antes ? Math.min((t - antes) / 1000, 0.1) : 0;
+    antes = t;
+    if (!arrastrando && !sinMovimiento) x -= velocidad * dt;
+    if (periodo) {                                   // recorrido infinito: vuelve al inicio sin que se note
+      while (x <= -periodo) x += periodo;
+      while (x > 0) x -= periodo;
+    }
+    pista.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
+    requestAnimationFrame(moverCarrusel);
+  }
+  medirCarrusel();
+  addEventListener('resize', medirCarrusel);
+  requestAnimationFrame(moverCarrusel);
+
+  marquee.addEventListener('pointerdown', e => {
+    arrastrando = true;
+    ultimoX = e.clientX;
+    marquee.setPointerCapture(e.pointerId);
+  });
+  marquee.addEventListener('pointermove', e => {
+    if (!arrastrando) return;
+    x += e.clientX - ultimoX;
+    ultimoX = e.clientX;
+  });
+  const soltar = () => (arrastrando = false);
+  marquee.addEventListener('pointerup', soltar);
+  marquee.addEventListener('pointercancel', soltar);  // p. ej. cuando el dedo hace scroll vertical
 
   /* ---------------- Sobre ---------------- */
   const pantalla = $('#pantalla-sobre');

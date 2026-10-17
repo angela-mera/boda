@@ -503,19 +503,23 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 /* ---------- Historia / marquee ---------- */
 .historia { background: var(--blanco); }
 .marquee {
-  margin: 40px -16px 0;
+  margin: 28px -16px -40px;            /* el margen negativo compensa el espacio extra de abajo */
   overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;                 /* deja hacer scroll vertical; el arrastre lateral lo maneja app.js */
+  -webkit-user-select: none;
+          user-select: none;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
+.marquee:active { cursor: grabbing; }
 .marquee-pista {
   display: flex;
   gap: 18px;
   width: max-content;
-  padding: 16px 0 26px;
-  animation: desplazar 45s linear infinite;
+  padding: 22px 0 64px;                /* espacio para que la sombra de cada foto no se corte */
+  will-change: transform;
 }
-.marquee:hover .marquee-pista { animation-play-state: paused; }
 .foto {
   flex: none;
   width: 186px;
@@ -523,12 +527,18 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   padding: 8px 8px 30px;
   background: var(--blanco);
   border-radius: 4px;
-  box-shadow: 0 10px 26px rgba(26, 26, 26, .14);
+  box-shadow: 0 6px 16px rgba(26, 26, 26, .13), 0 1px 3px rgba(26, 26, 26, .08);
   rotate: -2deg;
 }
 .foto:nth-child(even) { rotate: 2deg; translate: 0 10px; }
-.foto img, .foto video { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2px; background: var(--fondo-2); }
-@keyframes desplazar { to { transform: translateX(calc(-50% - 9px)); } }
+.foto img, .foto video {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--fondo-2);
+  pointer-events: none;                /* evita que el navegador "agarre" la imagen al arrastrar */
+}
 
 /* ---------- Vestimenta ---------- */
 .vestimenta { padding-top: 130px; }
@@ -567,7 +577,12 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   color: var(--tinta-2);
 }
 .bloque-ninos .opciones { max-width: 100%; }
-.rsvp-subtitulo { margin: 22px 0 4px; }
+.rsvp-subtitulo {                     /* "NIÑO(A) INVITADO(A)" debajo de una raya, separado de los adultos */
+  margin: 10px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--linea);
+}
+.rsvp-subtitulo + .persona { border-top: none; padding-top: 6px; }
 
 /* Aviso arriba cuando ya respondió */
 .aviso-confirmado {
