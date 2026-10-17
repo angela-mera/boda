@@ -113,16 +113,18 @@ function generarEnlaces() {
     }
     const personas = listaPersonas(fila[C_PERSONAS - 1], nombre);
     const enlace = SITE_URL + '?i=' + codigo;
-    // Una persona → "te"; varias → "los" (ustedes)
+    // Una persona → "te"; varias → "los" (ustedes).
+    // El corazón va como código (\u{1F90D} = 🤍) para que no se dañe al copiar y pegar el archivo.
+    const corazon = '\u{1F90D}';
     const texto = personas.length === 1
-      ? `¡Hola ${nombre}! 🤍 Con mucha ilusión hemos decidido invitarte a nuestra boda. ` +
+      ? `¡Hola ${nombre}! ${corazon} Con mucha ilusión hemos decidido invitarte a nuestra boda. ` +
         `Abre tu invitación aquí: ${enlace}\n\n${NOVIOS}`
-      : `¡Hola ${nombre}! 🤍 Con mucha ilusión hemos decidido invitarlos a nuestra boda. ` +
+      : `¡Hola ${nombre}! ${corazon} Con mucha ilusión hemos decidido invitarlos a nuestra boda. ` +
         `Abran su invitación aquí: ${enlace}\n\n${NOVIOS}`;
     fila[C_CODIGO - 1] = codigo;
     fila[C_PASES - 1] = personas.length;
     fila[C_ENLACE - 1] = enlace;
-    fila[C_WHATSAPP - 1] = 'https://wa.me/?text=' + encodeURIComponent(texto);
+    fila[C_WHATSAPP - 1] = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(texto);
   });
 
   hoja.getRange(2, 1, n, C_WHATSAPP).setValues(datos);
