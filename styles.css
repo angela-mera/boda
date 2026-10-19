@@ -19,13 +19,13 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { font-size: 17px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }   /* base un poco más grande: todos los textos en rem crecen ~6 % */
 body {
   margin: 0;
   background: var(--fondo);
   color: var(--tinta);
   font-family: var(--serif);
-  font-size: 19px;
+  font-size: 20px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -766,7 +766,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 
 /* ---------- Pantallas grandes ---------- */
 @media (min-width: 760px) {
-  body { font-size: 20px; }
+  body { font-size: 21px; }
   .foto { width: 228px; }
   .tarjeta { padding: 48px 40px; }
 }
