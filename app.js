@@ -24,7 +24,7 @@
   });
 
   // Fondos (imagen o video) con efecto parallax. Los videos solo se reproducen mientras se ven.
-  const esVideo = src => /\.(mp4|webm|mov)$/i.test(src);
+  const esVideo = src => /\.(mp4|webm|mov)(\?|$)/i.test(src);   // acepta "video.mp4?v=2"
   const videosFondo = new IntersectionObserver(entradas => entradas.forEach(e => {
     if (e.isIntersecting) e.target.play().catch(() => {});
     else e.target.pause();

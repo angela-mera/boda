@@ -50,7 +50,7 @@ window.BODA = {
   // Fondos de las secciones. Puede ser un video (.mp4, sin sonido, < 5 MB) o una imagen (.jpg ~1600px, < 400 KB).
   // Se mueven suavemente al hacer scroll.
   fondos: {
-    eventos: 'assets/fondos/218958.mp4',   // ceremonia y recepción → pon aquí tu video, ej. 'assets/video/eventos.mp4'
+    eventos: 'assets/fondos/218958.mp4?v=2',   // ceremonia y recepción → pon aquí tu video, ej. 'assets/video/eventos.mp4'
     rsvp: 'assets/fondos/227111.mp4'       // confirmación de asistencia
   },
 

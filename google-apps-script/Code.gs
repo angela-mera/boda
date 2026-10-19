@@ -159,12 +159,16 @@ function generarEnlaces() {
     const enlace = SITE_URL + '?i=' + codigo;
     // Una persona → "te"; varias → "los" (ustedes).
     // El corazón va como código (\u{1F90D} = 🤍) para que no se dañe al copiar y pegar el archivo.
-    const corazon = '\u{1F90D}';
-    const texto = total === 1
-      ? `¡Hola ${nombre}! ${corazon} Con mucha ilusión hemos decidido invitarte a nuestra boda. ` +
-        `Abre tu invitación aquí: ${enlace}\n\n${NOVIOS}`
-      : `¡Hola ${nombre}! ${corazon} Con mucha ilusión hemos decidido invitarlos a nuestra boda. ` +
-        `Abran su invitación aquí: ${enlace}\n\n${NOVIOS}`;
+    // Los emojis van como código para que no se dañen al copiar: 🤍 ✨ 💍 💌
+    const corazon = '\u{1F90D}', brillo = '\u{2728}', anillo = '\u{1F48D}', carta = '\u{1F48C}';
+    const una = total === 1;
+    const texto =
+      `¡Hola, ${nombre}! ${corazon}${brillo}\n\n` +
+      `Con mucha ilusión y amor, queremos ${una ? 'invitarte' : 'invitarlos'} a celebrar con nosotros ` +
+      `uno de los días más especiales de nuestras vidas: ¡nuestra boda!\n\n` +
+      `${anillo} Nos haría muy felices compartir este momento tan bonito ${una ? 'contigo' : 'con ustedes'}. ${corazon}\n\n` +
+      `${carta} ${una ? 'Descubre tu' : 'Descubran su'} invitación aquí: ${enlace}\n\n` +
+      `Con cariño,\n*${NOVIOS}*`;   // *texto* = negrita en WhatsApp
     fila[C_CODIGO - 1] = codigo;
     fila[C_PASES - 1] = adultos;                                       // pases: solo adultos
     fila[C_ENLACE - 1] = enlace;
