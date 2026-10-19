@@ -489,7 +489,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   color: var(--tinta);
 }
 .evento-lugar { margin: 0; font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
-.evento-dir { margin: 4px 0 22px; color: var(--gris); font-size: 1rem; }
+.evento-dir { margin: 4px 0 22px; color: var(--gris); font-size: calc(1rem + 1px); }
 
 .boton-linea {
   display: inline-flex;
@@ -531,7 +531,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 }
 .foto {
   flex: none;
-  width: 186px;
+  width: 200px;
   margin: 0;
   padding: 8px 8px 30px;
   background: var(--blanco);
@@ -580,7 +580,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   background: var(--fondo);
   border-radius: 0 12px 12px 0;
   text-align: left;
-  font-size: 1.08rem;
+  font-size: calc(1.08rem + 1px);
   font-style: italic;
   line-height: 1.55;
   color: var(--tinta-2);
@@ -767,7 +767,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 /* ---------- Pantallas grandes ---------- */
 @media (min-width: 760px) {
   body { font-size: 21px; }
-  .foto { width: 228px; }
+  .foto { width: 244px; }
   .tarjeta { padding: 48px 40px; }
 }
 
