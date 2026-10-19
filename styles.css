@@ -571,43 +571,66 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 
 
 /* ---------- Tips para el gran día ---------- */
-/* Fondo verde salvia muy suave con textura de papel, a juego con el sobre del inicio */
+/* Fondo blanco con ramas de eucalipto a los lados (la derecha, volteada) */
 .tips {
-  padding-top: 130px;
-  background-color: #E2EADF;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse at 15% 20%, rgba(255, 255, 255, .55), transparent 55%),
-    radial-gradient(ellipse at 85% 85%, rgba(138, 159, 136, .35), transparent 60%);
+  --verde-oscuro: #3E5141;
+  --verde-suave: #C9D5C3;
+  overflow: hidden;
+  background: var(--blanco);
 }
-.onda-gris .onda-relleno { fill: var(--fondo); }    /* mismo gris de "Formal elegante" */
-.onda-volteada { transform: scaleX(-1); }
-@media (min-width: 760px) { .tips { padding-top: 150px; } }
+/* Celular: ramas en las esquinas de arriba, a los lados del título */
+.tips::before, .tips::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  width: 118px;
+  height: 400px;
+  background: url("assets/decoracion/rama.svg") top center / contain no-repeat;
+  opacity: .85;
+  pointer-events: none;
+}
+.tips::before { left: -34px; }
+.tips::after { right: -34px; transform: scaleX(-1); }
+.tips .contenido > .texto { padding: 0 30px; }   /* que el párrafo no choque con las hojas */
+
+/* Computador: ramas a lo alto de toda la sección, junto al recuadro */
+@media (min-width: 760px) {
+  .tips::before, .tips::after {
+    top: 50px;
+    bottom: 50px;
+    height: auto;
+    width: 240px;
+    background-position: center;
+  }
+  .tips::before { left: max(-30px, calc(50% - 280px - 250px)); }
+  .tips::after { right: max(-30px, calc(50% - 280px - 250px)); }
+  .tips .contenido > .texto { padding: 0; }
+}
 .tips-lista {
   position: relative;
   margin: 30px 0 0;
   padding: 30px 22px;
   list-style: none;
   text-align: left;
-  border: 1px solid var(--tinta);            /* marco elegante de doble línea */
-  outline: 1px solid var(--linea);
+  border: 1px solid var(--verde-oscuro);     /* marco elegante de doble línea */
+  outline: 1px solid var(--verde-suave);
   outline-offset: -8px;
   border-radius: 4px;
   background: var(--blanco);
-  box-shadow: 0 18px 40px rgba(60, 80, 62, .14), 0 2px 6px rgba(60, 80, 62, .06);
+  box-shadow: 0 14px 34px rgba(62, 81, 65, .10);
 }
 .tip { display: flex; gap: 16px; align-items: flex-start; }
-.tip + .tip { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--linea); }
+.tip + .tip { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--verde-suave); }
 .tip-icono {
   flex: none;
   width: 46px;
   height: 46px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--tinta);
+  border: 1px solid var(--verde-oscuro);
   border-radius: 50%;
   font-size: 1.45rem;
-  color: var(--tinta);
+  color: var(--verde-oscuro);
 }
 .tip-titulo {
   margin: 2px 0 4px;
