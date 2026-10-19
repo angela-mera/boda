@@ -304,7 +304,7 @@
   const menores = () => invitacion.menores || [];
   const todos = () => [...adultos(), ...menores()];
   const esUna = () => !!invitacion && todos().length === 1;
-  const etiquetaNinos = () => (menores().length === 1 ? 'Niño(a) invitado(a)' : 'Niños(as) invitados(as)');
+  const etiquetaNinos = () => (menores().length === 1 ? 'Niño(a)' : 'Niños(as)');
 
   function personalizar(inv) {
     invitacion = inv;

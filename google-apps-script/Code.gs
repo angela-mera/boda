@@ -4,7 +4,7 @@
  */
 
 // Enlace de la invitación publicada (termina en /)
-const SITE_URL = 'https://angela-mera.github.io/boda/';
+const SITE_URL = 'https://boda-valentina-y-santiago.lat/';
 const FECHA_LIMITE = new Date('2026-12-01T23:59:59-05:00');
 const NOVIOS = 'Valentina & Santiago';
 
