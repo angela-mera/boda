@@ -571,39 +571,29 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 
 
 /* ---------- Tips para el gran día ---------- */
-/* Fondo blanco con ramas de eucalipto a los lados (la derecha, volteada) */
+/* Fondo blanco con adornos florales en las esquinas (assets/decoracion/esquina-*.png) */
 .tips {
   --verde-oscuro: #3E5141;
   --verde-suave: #C9D5C3;
-  overflow: hidden;
-  background: var(--blanco);
+  --esquina: 150px;
+  background:
+    url("assets/decoracion/esquina-arriba-izq.png") left 6px top 6px / var(--esquina) no-repeat,
+    url("assets/decoracion/esquina-arriba-der.png") right 6px top 6px / var(--esquina) no-repeat,
+    var(--blanco);
 }
-/* Celular: ramas en las esquinas de arriba, a los lados del título */
-.tips::before, .tips::after {
-  content: '';
-  position: absolute;
-  top: 18px;
-  width: 118px;
-  height: 400px;
-  background: url("assets/decoracion/rama.svg") top center / contain no-repeat;
-  opacity: .85;
-  pointer-events: none;
-}
-.tips::before { left: -34px; }
-.tips::after { right: -34px; transform: scaleX(-1); }
-.tips .contenido > .texto { padding: 0 30px; }   /* que el párrafo no choque con las hojas */
+.tips .contenido > .texto { padding: 0 24px; }   /* que el párrafo no choque con las hojas */
 
-/* Computador: ramas a lo alto de toda la sección, junto al recuadro */
+/* Computador: hay más espacio, así que van en las cuatro esquinas, como un marco */
 @media (min-width: 760px) {
-  .tips::before, .tips::after {
-    top: 50px;
-    bottom: 50px;
-    height: auto;
-    width: 240px;
-    background-position: center;
+  .tips {
+    --esquina: 260px;
+    background:
+      url("assets/decoracion/esquina-arriba-izq.png") left 16px top 16px / var(--esquina) no-repeat,
+      url("assets/decoracion/esquina-arriba-der.png") right 16px top 16px / var(--esquina) no-repeat,
+      url("assets/decoracion/esquina-abajo-izq.png") left 16px bottom 16px / var(--esquina) no-repeat,
+      url("assets/decoracion/esquina-abajo-der.png") right 16px bottom 16px / var(--esquina) no-repeat,
+      var(--blanco);
   }
-  .tips::before { left: max(-30px, calc(50% - 280px - 250px)); }
-  .tips::after { right: max(-30px, calc(50% - 280px - 250px)); }
   .tips .contenido > .texto { padding: 0; }
 }
 .tips-lista {
