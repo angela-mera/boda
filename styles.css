@@ -101,7 +101,7 @@ i[class^="ph"] { line-height: 1; }
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 12%;
+  padding-top: 38px;            /* medida fija: un % se calcularía sobre el ancho de la pantalla */
   gap: 6px;
   background: #FBF8F1;
   border-radius: 4px;
