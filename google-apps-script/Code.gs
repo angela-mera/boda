@@ -105,7 +105,8 @@ function crearResumen(res) {
   const filas = [
     // fila, etiqueta, fórmula, color de fondo
     [2, 'Total Invitaciones Enviadas', '=COUNTA(Invitados!B2:B)', null],
-    [4, 'Total Personas invitadas', '=SUM(Invitados!E2:E)', null],
+    // Personas = pases (adultos) + niños de la columna D (cuenta los nombres separados por coma)
+    [4, 'Total Personas invitadas', '=SUM(Invitados!E2:E)+SUMPRODUCT((LEN(TRIM(Invitados!D2:D))>0)*(LEN(Invitados!D2:D)-LEN(SUBSTITUTE(Invitados!D2:D,",",""))+1))', null],
     [5, '✓ Asisten', '=COUNTIF(Respuestas!E2:E,"Sí")', '#D9EAD3'],
     [6, '✗ No asisten', '=COUNTIF(Respuestas!E2:E,"No")', '#F4CCCC'],
     [8, 'Personas sin responder', '=C4-C5-C6', null],
@@ -153,7 +154,8 @@ function generarEnlaces() {
       do { codigo = codigoAleatorio(); } while (usados.has(codigo));
       usados.add(codigo);
     }
-    const total = listaPersonas(fila[C_ADULTOS - 1], nombre).length + listaNombres(fila[C_NINOS - 1]).length;
+    const adultos = listaPersonas(fila[C_ADULTOS - 1], nombre).length;
+    const total = adultos + listaNombres(fila[C_NINOS - 1]).length;   // para el singular/plural del mensaje
     const enlace = SITE_URL + '?i=' + codigo;
     // Una persona → "te"; varias → "los" (ustedes).
     // El corazón va como código (\u{1F90D} = 🤍) para que no se dañe al copiar y pegar el archivo.
@@ -164,7 +166,7 @@ function generarEnlaces() {
       : `¡Hola ${nombre}! ${corazon} Con mucha ilusión hemos decidido invitarlos a nuestra boda. ` +
         `Abran su invitación aquí: ${enlace}\n\n${NOVIOS}`;
     fila[C_CODIGO - 1] = codigo;
-    fila[C_PASES - 1] = total;
+    fila[C_PASES - 1] = adultos;                                       // pases: solo adultos
     fila[C_ENLACE - 1] = enlace;
     fila[C_WHATSAPP - 1] = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(texto);
   });

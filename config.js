@@ -30,8 +30,10 @@ window.BODA = {
   },
 
   historia:
-    'Nos conocimos una tarde cualquiera que terminó siendo la más importante de nuestras vidas. ' +
-    'Entre risas, viajes y sueños compartidos, descubrimos que queríamos caminar juntos para siempre.',
+    'Durante tres años y medio, nuestro amor aprendió a vivir entre kilómetros, despedidas y abrazos que ' +
+    'siempre parecían demasiado cortos. Aprendimos que amar también era esperar, extrañarnos y elegirnos una ' +
+    'y otra vez, incluso en la distancia. Hoy, después de tantas despedidas, nos preparamos para el comienzo ' +
+    'más bonito de nuestra historia: una vida juntos, sin tener que volver a decirnos adiós.',
 
   // Fotos del carrusel "Nuestra historia" (reemplaza por tus .jpg, idealmente verticales ~800px de alto)
   // También acepta videos cortos .mp4 (sin sonido, < 3 MB). Si son pocas, se repiten solas para llenar la pantalla.

@@ -151,7 +151,7 @@
 
     const k = Math.min(Math.max(W / 375, 1), 1.5);           // escala del encaje
     const banda = 16 * k, radio = 7 * k, paso = 13 * k;
-    const tela = '#2A301D', hueco = '#57603F';
+    const tela = '#3E5141', hueco = '#728A73';
     let franjas = '', ondas = '', huecos = '', puntos = '', bordes = '';
 
     [[0, lado, W / 2, punta], [W, lado, W / 2, punta]].forEach(([ax, ay, bx, by]) => {
@@ -348,13 +348,14 @@
 
   function pintarFormulario() {
     caja.style.textAlign = '';
-    const total = todos().length;
+    // Asientos: solo cuentan los adultos (los niños no tienen puesto individual asignado)
+    const nA = adultos().length;
     const form = el('form', { noValidate: true });
     form.append(
       el('p', { className: 'rsvp-hola', textContent: invitacion.invitacion }),
       el('p', { className: 'rsvp-pases', textContent: esUna()
         ? 'Hemos reservado 1 asiento para ti'
-        : `Hemos reservado ${total} asientos para ustedes` })
+        : `Hemos reservado ${nA} ${nA === 1 ? 'asiento' : 'asientos'} para ustedes` })
     );
 
     // Cada persona tiene un id: a0, a1… (adultos) y n0, n1… (niños)
