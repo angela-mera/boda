@@ -23,17 +23,21 @@
     });
   });
 
-  // Fondos (imagen o video) con efecto parallax. Los videos solo se reproducen mientras se ven.
+  // Fondos (imagen o video): quedan fijos del tamaño de la pantalla mientras el contenido
+  // pasa por encima (ver .fondo-fijo en styles.css). Los videos solo se reproducen mientras se ven.
   const esVideo = src => /\.(mp4|webm|mov)(\?|$)/i.test(src);   // acepta "video.mp4?v=2"
   const videosFondo = new IntersectionObserver(entradas => entradas.forEach(e => {
     if (e.isIntersecting) e.target.play().catch(() => {});
     else e.target.pause();
   }));
-  const fondos = $$('[data-fondo]').map(sec => {
+  $$('[data-fondo]').forEach(sec => {
     const src = B.fondos[sec.dataset.fondo];
     const capa = document.createElement('div');
     capa.className = 'fondo';
     capa.setAttribute('aria-hidden', 'true');
+    const fijo = document.createElement('div');
+    fijo.className = 'fondo-fijo';
+    capa.appendChild(fijo);
     let medio;
     if (esVideo(src)) {
       medio = Object.assign(document.createElement('video'), { muted: true, loop: true, playsInline: true, preload: 'metadata', src });
@@ -43,26 +47,9 @@
     } else {
       medio = Object.assign(document.createElement('img'), { src, alt: '', loading: 'lazy' });
     }
-    capa.appendChild(medio);
+    fijo.appendChild(medio);
     sec.prepend(capa);
-    return capa;
   });
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let pendiente = false;
-    const mover = () => {
-      pendiente = false;
-      const alto = innerHeight;
-      fondos.forEach(capa => {
-        const r = capa.parentElement.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > alto) return;
-        const desplazamiento = (r.top + r.height / 2 - alto / 2) * -0.12;
-        capa.style.transform = `translate3d(0, ${desplazamiento.toFixed(1)}px, 0)`;
-      });
-    };
-    addEventListener('scroll', () => { if (!pendiente) { pendiente = true; requestAnimationFrame(mover); } }, { passive: true });
-    addEventListener('resize', mover);
-    mover();
-  }
   $('#historia-texto').textContent = B.historia;
   $('#rsvp-limite').innerHTML = `Por favor confírmanos antes del <strong>${B.fechaLimiteTexto}</strong>.`;
 

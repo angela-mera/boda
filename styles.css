@@ -337,16 +337,25 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 }
 .contenido { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; }
 
-/* ----- Secciones con imagen de fondo (parallax) ----- */
-.con-fondo { overflow: hidden; padding: 110px 16px; }
-.fondo {
-  position: absolute;
-  inset: -30% 0;              /* margen extra para el desplazamiento */
-  will-change: transform;
+/* ----- Secciones con imagen o video de fondo -----
+   El fondo mide exactamente una pantalla y queda fijo mientras el contenido pasa por encima
+   (efecto parallax). Así el video no se amplía en celulares, donde la sección es muy alta. */
+.con-fondo {
+  overflow: hidden;
+  overflow: clip;              /* "clip" no rompe el position: sticky de abajo */
+  padding: 110px 16px;
+  background: linear-gradient(160deg, #9E9E9E, #D4D4D4);   /* se ve mientras carga el fondo */
 }
-.fondo img, .fondo video { width: 100%; height: 100%; object-fit: cover; }
-.con-fondo { background: linear-gradient(160deg, #9E9E9E, #D4D4D4); }   /* se ve mientras carga el fondo */
-.fondo::after {
+.fondo { position: absolute; inset: 0; }
+.fondo-fijo {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100lvh;              /* alto de pantalla en celulares (incluye la barra del navegador) */
+  overflow: hidden;
+}
+.fondo-fijo img, .fondo-fijo video { width: 100%; height: 100%; object-fit: cover; }
+.fondo-fijo::after {
   content: '';
   position: absolute;
   inset: 0;
