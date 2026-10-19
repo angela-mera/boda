@@ -585,7 +585,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 @media (min-width: 760px) { .tips { padding-top: 150px; } }
 .tips-lista {
   position: relative;
-  margin: 30px 0 34px;
+  margin: 30px 0 0;
   padding: 30px 22px;
   list-style: none;
   text-align: left;
@@ -618,7 +618,6 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 }
 .tip-texto { margin: 0; color: var(--tinta-2); line-height: 1.55; }
 .tip-texto strong { color: var(--tinta); font-weight: 600; }
-.tips-cierre { margin-bottom: 0; }
 
 /* ---------- RSVP ---------- */
 .rsvp-caja { margin-top: 20px; text-align: left; }
