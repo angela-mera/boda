@@ -312,7 +312,7 @@ i[class^="ph"] { line-height: 1; }
   flex-direction: column;
   align-items: center;
 }
-.nombres .amp { font-size: .6em; color: var(--verde-medio); margin: -.05em 0; }
+.nombres .amp { font-size: .6em; color: var(--tinta); margin: -.05em 0; }
 .bajar {
   position: absolute;
   bottom: max(22px, env(safe-area-inset-bottom));
@@ -801,7 +801,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 .eyebrow { text-indent: .38em; }
 /* En la portada, la "V" grande de Valentina carga el peso visual a la izquierda:
    se corre "NUESTRA BODA" un poco a la derecha para que se vea centrado. */
-.portada-texto .eyebrow { position: relative; left: 14px; }
+.portada-texto .eyebrow { position: relative; left: 14px; color: var(--tinta); }   /* en la portada va en negro */
 .sobre-eyebrow { text-indent: .32em; }
 .sobre-toca { text-indent: .3em; }
 .carta-mini { text-indent: .35em; }
