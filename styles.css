@@ -224,21 +224,21 @@ i[class^="ph"] { line-height: 1; }
   text-align: center;
   transition: opacity .4s ease;
 }
-.sobre-para { font-style: italic; font-size: 1.55rem; color: rgba(237, 228, 207, .85); }
+.sobre-para { font-style: italic; font-size: 1.4rem; color: rgba(237, 228, 207, .85); }
 .sobre-para strong {
   display: block;
   font-family: var(--script);
   font-style: normal;
   font-weight: 400;
-  font-size: 3.1rem;
+  font-size: 2.8rem;
   text-wrap: balance;          /* si el nombre es largo, se parte en 2 líneas parejas */
   line-height: 1.2;
   color: var(--crema);
 }
 .sobre-toca {
   font-family: var(--serif);
-  font-size: 1.1rem;
-  letter-spacing: .12em;
+  font-size: 1rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--crema);
   animation: latido 2.2s ease-in-out infinite;
@@ -805,7 +805,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 #anuncio .separador { background: var(--tinta); opacity: .5; }
 .portada-texto .eyebrow { position: relative; left: 14px; color: var(--tinta); }   /* en la portada va en negro */
 .sobre-eyebrow { text-indent: .32em; }
-.sobre-toca { text-indent: .12em; }
+.sobre-toca { text-indent: .14em; }
 .carta-mini { text-indent: .35em; }
 .cal-mes { text-indent: .4em; }
 .cal-lado { text-indent: .25em; }
