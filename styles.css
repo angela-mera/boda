@@ -49,7 +49,7 @@ i[class^="ph"] { line-height: 1; }
   --oliva-oscuro: #677E68;
   --oliva-claro: #8A9F88;
   --crema: #EDE4CF;
-  --dorado-suave: #D9C6A0;
+  --dorado-suave: #CDB585;     /* nombres del sobre: dorado un poco más oscuro */
   --lado: 40vh;
   --punta: 56vh;
 
@@ -224,20 +224,20 @@ i[class^="ph"] { line-height: 1; }
   text-align: center;
   transition: opacity .4s ease;
 }
-.sobre-para { font-style: italic; font-size: 1.05rem; color: rgba(237, 228, 207, .75); }
+.sobre-para { font-style: italic; font-size: 1.3rem; color: rgba(237, 228, 207, .85); }
 .sobre-para strong {
   display: block;
   font-family: var(--script);
   font-style: normal;
   font-weight: 400;
-  font-size: 2rem;
+  font-size: 2.6rem;
   line-height: 1.2;
   color: var(--crema);
 }
 .sobre-toca {
   font-family: var(--serif);
-  font-size: .82rem;
-  letter-spacing: .3em;
+  font-size: .95rem;
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--crema);
   animation: latido 2.2s ease-in-out infinite;
@@ -804,7 +804,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 #anuncio .separador { background: var(--tinta); opacity: .5; }
 .portada-texto .eyebrow { position: relative; left: 14px; color: var(--tinta); }   /* en la portada va en negro */
 .sobre-eyebrow { text-indent: .32em; }
-.sobre-toca { text-indent: .3em; }
+.sobre-toca { text-indent: .18em; }
 .carta-mini { text-indent: .35em; }
 .cal-mes { text-indent: .4em; }
 .cal-lado { text-indent: .25em; }
