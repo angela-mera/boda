@@ -297,6 +297,8 @@
     invitacion = inv;
     // Invitación para una sola persona: los textos pasan a singular (ustedes → ti)
     if (esUna()) $$('[data-singular]').forEach(e => (e.textContent = e.dataset.singular));
+    // La nota sobre los niños solo aparece si la invitación incluye niños
+    $('#nota-ninos').hidden = !menores().length;
     const para = $('#sobre-para');
     if (para) {
       para.replaceChildren('Para', el('strong', { textContent: inv.invitacion }));

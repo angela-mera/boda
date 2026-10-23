@@ -9,6 +9,9 @@
   --tinta-2: #3D3D3D;
   --gris: #6B6B6B;
   --gris-claro: #9A9A9A;
+  --verde: #3E5141;          /* verde salvia oscuro (acentos) */
+  --verde-medio: #5E7560;
+  --verde-claro: #C9D5C3;
   --linea: #D9D9D9;
 
   --script: 'Mea Culpa', cursive;
@@ -297,7 +300,7 @@ i[class^="ph"] { line-height: 1; }
   font-weight: 500;
   letter-spacing: .38em;
   text-transform: uppercase;
-  color: var(--gris);
+  color: var(--verde-medio);
 }
 .nombres {
   margin: 0;
@@ -309,7 +312,7 @@ i[class^="ph"] { line-height: 1; }
   flex-direction: column;
   align-items: center;
 }
-.nombres .amp { font-size: .6em; color: var(--tinta-2); margin: -.05em 0; }
+.nombres .amp { font-size: .6em; color: var(--verde-medio); margin: -.05em 0; }
 .bajar {
   position: absolute;
   bottom: max(22px, env(safe-area-inset-bottom));
@@ -375,7 +378,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   display: block;
   margin: 0 auto 10px;
   font-size: 2.6rem;
-  color: var(--tinta);
+  color: var(--verde);
 }
 
 .monograma {
@@ -390,15 +393,15 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   width: 48px;
   height: 1px;
   margin: 44px auto 36px;
-  background: var(--tinta);
-  opacity: .5;
+  background: var(--verde-medio);
+  opacity: .8;
 }
 
 .ornamento {
   width: 120px;
   height: 22px;
   margin: 0 auto 28px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 22'%3E%3Cg fill='none' stroke='%239A9A9A' stroke-width='1'%3E%3Cpath d='M0 11h44M76 11h44'/%3E%3Cpath d='M60 3c4 4 4 12 0 16c-4-4-4-12 0-16z'/%3E%3Cpath d='M60 11c-6-5-12-5-15 0c3 5 9 5 15 0zM60 11c6-5 12-5 15 0c-3 5-9 5-15 0z'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 22'%3E%3Cg fill='none' stroke='%235E7560' stroke-width='1'%3E%3Cpath d='M0 11h44M76 11h44'/%3E%3Cpath d='M60 3c4 4 4 12 0 16c-4-4-4-12 0-16z'/%3E%3Cpath d='M60 11c-6-5-12-5-15 0c3 5 9 5 15 0zM60 11c6-5 12-5 15 0c-3 5-9 5-15 0z'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .saludo { margin: 0 0 20px; font-family: var(--script); font-size: 2.3rem; line-height: 1.2; }
@@ -429,13 +432,13 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 .cal-lado {
   width: 92px;
   padding: 6px 0;
-  border-top: 1px solid var(--tinta);
-  border-bottom: 1px solid var(--tinta);
+  border-top: 1px solid var(--verde-medio);
+  border-bottom: 1px solid var(--verde-medio);
   font-size: .92rem;
   letter-spacing: .25em;
   text-transform: uppercase;
 }
-.cal-dia { font-size: 4.4rem; line-height: 1; font-weight: 300; }
+.cal-dia { font-size: 4.4rem; line-height: 1; font-weight: 300; color: var(--verde); }
 .cuenta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .cuenta > div { padding: 14px 2px 10px; background: var(--blanco); border-radius: 14px; box-shadow: 0 6px 18px rgba(26, 26, 26, .06); }
 .cuenta span {
@@ -444,6 +447,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   line-height: 1;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+  color: var(--verde);
 }
 .cuenta small {
   display: block;
@@ -572,8 +576,8 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 
 /* ---------- Tips para el gran día ---------- */
 .tips {
-  --verde-oscuro: #3E5141;
-  --verde-suave: #C9D5C3;
+  --verde-oscuro: var(--verde);
+  --verde-suave: var(--verde-claro);
   background: var(--blanco);
 }
 .tips-lista {
