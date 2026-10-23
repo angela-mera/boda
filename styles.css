@@ -300,7 +300,7 @@ i[class^="ph"] { line-height: 1; }
   font-weight: 500;
   letter-spacing: .38em;
   text-transform: uppercase;
-  color: var(--verde-medio);
+  color: var(--tinta);
 }
 .nombres {
   margin: 0;
@@ -414,6 +414,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   margin: 0 0 16px;
   font-family: var(--script);
   font-weight: 400;
+  color: var(--verde);
   font-size: 2.8rem;
   line-height: 1.2;
   text-wrap: balance;          /* reparte las palabras parejo si el título ocupa 2 líneas */
@@ -480,7 +481,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   opacity: .35;
 }
 .evento .icono { font-size: 3rem; margin-top: 8px; }
-.evento-titulo { margin: 0; font-family: var(--script); font-weight: 400; font-size: 2.5rem; line-height: 1.2; }
+.evento-titulo { margin: 0; font-family: var(--script); font-weight: 400; font-size: 2.5rem; line-height: 1.2; color: var(--verde); }
 .evento-hora {
   display: flex;
   align-items: center;
@@ -800,7 +801,6 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 .eyebrow { text-indent: .38em; }
 /* En la portada, la "V" grande de Valentina carga el peso visual a la izquierda:
    se corre "NUESTRA BODA" un poco a la derecha para que se vea centrado. */
-#anuncio .eyebrow { color: var(--gris); }
 #anuncio .separador { background: var(--tinta); opacity: .5; }
 .portada-texto .eyebrow { position: relative; left: 14px; color: var(--tinta); }   /* en la portada va en negro */
 .sobre-eyebrow { text-indent: .32em; }
