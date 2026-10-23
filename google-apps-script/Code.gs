@@ -195,6 +195,8 @@ function generarEnlaces() {
   });
 
   hoja.getRange(2, 1, n, C_WHATSAPP).setValues(datos);
+  // Los enlaces son largos: se recortan en su columna en vez de verse encima de las de al lado
+  hoja.getRange(2, C_ENLACE, n, 2).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
   SpreadsheetApp.getUi().alert('Códigos y enlaces generados ✅\nAbre el enlace de la columna WhatsApp para enviar cada invitación.');
 }
 
