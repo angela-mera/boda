@@ -13,12 +13,12 @@ const HOJA_RESP = 'Respuestas';
 const HOJA_RESUMEN = 'Resumen';
 
 // Columnas de "Invitados" (1 = A)
-const C_CODIGO = 1, C_NOMBRE = 2, C_ADULTOS = 3, C_NINOS = 4, C_PASES = 5, C_ENLACE = 6, C_WHATSAPP = 7, C_ESTADO = 8;
-const C_PRIMERA = 9, C_ULTIMA = 10, C_VECES = 11;   // cuándo abrieron la invitación
+const C_CODIGO = 1, C_NOMBRE = 2, C_ADULTOS = 3, C_NINOS = 4, C_PASES = 5, C_ENLACE = 6, C_WHATSAPP = 7;
+const C_PRIMERA = 8, C_ULTIMA = 9, C_VECES = 10;    // cuándo abrieron la invitación
 const ZONA_HORARIA = 'America/Bogota';
 const ENCABEZADOS_INV = [
   'Código', 'Invitación (como se muestra)', 'Adultos (separados por coma)', 'Niños (separados por coma)',
-  'Pases', 'Enlace', 'WhatsApp', 'Estado', 'Primera vez abierta', 'Última vez abierta', 'Veces abierta'
+  'Pases', 'Enlace', 'WhatsApp', 'Primera vez abierta', 'Última vez abierta', 'Veces abierta'
 ];
 const ENCABEZADOS_RESP = ['Fecha', 'Código', 'Invitación', 'Persona', '¿Asiste?', 'Alergias', 'Tipo'];
 
@@ -67,6 +67,7 @@ function prepararHojas() {
  * Actualiza hojas creadas con versiones anteriores del código, sin perder datos:
  * - Invitados: agrega la columna "Niños" después de "Adultos" (las demás se corren solas).
  * - Respuestas: la columna G pasa a ser "Tipo" (Adulto / Niño).
+ * - Invitados: quita la columna "Estado" (las respuestas ya están en la pestaña Respuestas).
  * - Invitados: agrega las columnas de aperturas (primera vez, última vez y veces).
  */
 function asegurarEstructura() {
@@ -79,6 +80,11 @@ function asegurarEstructura() {
     inv.getRange(1, C_ADULTOS, 1, 2).setValues([[ENCABEZADOS_INV[C_ADULTOS - 1], ENCABEZADOS_INV[C_NINOS - 1]]]);
     estilizarEncabezado(inv, ENCABEZADOS_INV.length);
     inv.setColumnWidth(C_NINOS, 240);
+    cambio = true;
+  }
+
+  if (inv && inv.getRange(1, 8).getValue() === 'Estado') {
+    inv.deleteColumn(8);                           // las columnas de aperturas se corren a la izquierda
     cambio = true;
   }
 
@@ -121,8 +127,9 @@ function crearResumen(res) {
     [5, '✓ Asisten', '=COUNTIF(Respuestas!E2:E,"Sí")', '#D9EAD3'],
     [6, '✗ No asisten', '=COUNTIF(Respuestas!E2:E,"No")', '#F4CCCC'],
     [8, 'Personas sin responder', '=C4-C5-C6', null],
-    [9, 'Invitaciones sin responder', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"")', null],
-    [10, 'Invitaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!I2:I,"")', null],
+    // Invitaciones con código que todavía no tienen ninguna fila en Respuestas
+    [9, 'Invitaciones sin responder', '=SUMPRODUCT((Invitados!A2:A<>"")*(COUNTIF(Respuestas!B2:B,Invitados!A2:A)=0))', null],
+    [10, 'Invitaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"")', null],
     [12, 'Niños que asisten', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null]
   ];
   filas.forEach(([fila, etiqueta, formula, color]) => {
@@ -297,11 +304,6 @@ function doPost(e) {
       if (String(hoja.getRange(r, 2).getValue()).toUpperCase() === inv.codigo) hoja.deleteRow(r);
     }
     hoja.getRange(hoja.getLastRow() + 1, 1, filas.length, ENCABEZADOS_RESP.length).setValues(filas);
-
-    const si = filas.filter(f => f[4] === 'Sí').length;
-    SpreadsheetApp.getActive().getSheetByName(HOJA_INV)
-      .getRange(inv.fila, C_ESTADO)
-      .setValue(`✓ ${si} asiste(n) · ✗ ${filas.length - si} no` + (vanNinos ? ` · ${vanNinos} niño(s)` : ''));
 
     return json({ ok: true });
   } finally {
