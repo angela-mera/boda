@@ -440,7 +440,7 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 }
 .cal-dia { font-size: 4.4rem; line-height: 1; font-weight: 300; }
 .cuenta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.cuenta > div { padding: 14px 2px 10px; background: #E6EEE3; border-radius: 14px; box-shadow: 0 6px 18px rgba(62, 81, 65, .07); }
+.cuenta > div { padding: 14px 2px 10px; background: var(--blanco); border-radius: 14px; box-shadow: 0 6px 18px rgba(26, 26, 26, .06); }
 .cuenta span {
   display: block;
   font-size: 2rem;
