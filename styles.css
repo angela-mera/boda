@@ -480,8 +480,8 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
   background: var(--tinta);
   opacity: .35;
 }
-.evento .icono { font-size: 3rem; margin-top: 8px; }
-.evento-titulo { margin: 0; font-family: var(--script); font-weight: 400; font-size: 2.5rem; line-height: 1.2; color: var(--verde); }
+.evento .icono { font-size: 3rem; margin-top: 8px; color: var(--tinta); }
+.evento-titulo { margin: 0; font-family: var(--script); font-weight: 400; font-size: 2.5rem; line-height: 1.2; }
 .evento-hora {
   display: flex;
   align-items: center;
