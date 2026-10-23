@@ -14,9 +14,11 @@ const HOJA_RESUMEN = 'Resumen';
 
 // Columnas de "Invitados" (1 = A)
 const C_CODIGO = 1, C_NOMBRE = 2, C_ADULTOS = 3, C_NINOS = 4, C_PASES = 5, C_ENLACE = 6, C_WHATSAPP = 7, C_ESTADO = 8;
+const C_PRIMERA = 9, C_ULTIMA = 10, C_VECES = 11;   // cuándo abrieron la invitación
+const ZONA_HORARIA = 'America/Bogota';
 const ENCABEZADOS_INV = [
   'Código', 'Invitación (como se muestra)', 'Adultos (separados por coma)', 'Niños (separados por coma)',
-  'Pases', 'Enlace', 'WhatsApp', 'Estado'
+  'Pases', 'Enlace', 'WhatsApp', 'Estado', 'Primera vez abierta', 'Última vez abierta', 'Veces abierta'
 ];
 const ENCABEZADOS_RESP = ['Fecha', 'Código', 'Invitación', 'Persona', '¿Asiste?', 'Alergias', 'Tipo'];
 
@@ -65,6 +67,7 @@ function prepararHojas() {
  * Actualiza hojas creadas con versiones anteriores del código, sin perder datos:
  * - Invitados: agrega la columna "Niños" después de "Adultos" (las demás se corren solas).
  * - Respuestas: la columna G pasa a ser "Tipo" (Adulto / Niño).
+ * - Invitados: agrega las columnas de aperturas (primera vez, última vez y veces).
  */
 function asegurarEstructura() {
   const ss = SpreadsheetApp.getActive();
@@ -76,6 +79,14 @@ function asegurarEstructura() {
     inv.getRange(1, C_ADULTOS, 1, 2).setValues([[ENCABEZADOS_INV[C_ADULTOS - 1], ENCABEZADOS_INV[C_NINOS - 1]]]);
     estilizarEncabezado(inv, ENCABEZADOS_INV.length);
     inv.setColumnWidth(C_NINOS, 240);
+    cambio = true;
+  }
+
+  if (inv && !inv.getRange(1, C_PRIMERA).getValue()) {
+    inv.getRange(1, C_PRIMERA, 1, 3).setValues([ENCABEZADOS_INV.slice(C_PRIMERA - 1, C_VECES)]);
+    estilizarEncabezado(inv, ENCABEZADOS_INV.length);
+    inv.setColumnWidths(C_PRIMERA, 2, 150);
+    inv.setColumnWidth(C_VECES, 100);
     cambio = true;
   }
 
@@ -111,7 +122,8 @@ function crearResumen(res) {
     [6, '✗ No asisten', '=COUNTIF(Respuestas!E2:E,"No")', '#F4CCCC'],
     [8, 'Personas sin responder', '=C4-C5-C6', null],
     [9, 'Invitaciones sin responder', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"")', null],
-    [11, 'Niños que asisten', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null]
+    [10, 'Invitaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!I2:I,"")', null],
+    [12, 'Niños que asisten', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null]
   ];
   filas.forEach(([fila, etiqueta, formula, color]) => {
     res.getRange(fila, 2).setValue(etiqueta);
@@ -121,13 +133,13 @@ function crearResumen(res) {
   });
 
   // Alergias: una línea por persona, "Nombre — alergia"
-  res.getRange('B13').setValue('Alergias reportadas').setFontWeight('bold')
+  res.getRange('B14').setValue('Alergias reportadas').setFontWeight('bold')
     .setBorder(true, true, true, true, false, false);
-  res.getRange('B14')
+  res.getRange('B15')
     .setFormula('=IFERROR(FILTER(Respuestas!D2:D&" — "&Respuestas!F2:F,Respuestas!F2:F<>""),"Ninguna por ahora")')
     .setBorder(true, true, true, true, false, false);
 
-  res.getRange('B2:C14').setFontSize(11).setVerticalAlignment('middle');
+  res.getRange('B2:C15').setFontSize(11).setVerticalAlignment('middle');
   res.setColumnWidth(1, 40);
   res.setColumnWidth(2, 230);
   res.setColumnWidth(3, 140);
@@ -216,11 +228,27 @@ function buscarInvitacion(codigo) {
   return null;
 }
 
+// Anota cuándo se abrió la invitación: primera vez, última vez y cuántas veces
+function registrarApertura(inv) {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) return;                 // si está ocupado, no se anota (no frena al invitado)
+  try {
+    const hoja = SpreadsheetApp.getActive().getSheetByName(HOJA_INV);
+    const celdas = hoja.getRange(inv.fila, C_PRIMERA, 1, 3);
+    const [primera, , veces] = celdas.getValues()[0];
+    const ahora = Utilities.formatDate(new Date(), ZONA_HORARIA, 'dd/MM/yyyy HH:mm');
+    celdas.setValues([[primera || ahora, ahora, (Number(veces) || 0) + 1]]);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function doGet(e) {
   asegurarEstructura();
   const codigo = String((e.parameter && e.parameter.i) || '').trim().toUpperCase();
   const inv = buscarInvitacion(codigo);
   if (!inv) return json({ ok: false, error: 'no_encontrada' });
+  if (!e.parameter.prueba) registrarApertura(inv);   // "&prueba=1" en el enlace = no se anota
 
   const respuestas = {};
   const hoja = SpreadsheetApp.getActive().getSheetByName(HOJA_RESP);

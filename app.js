@@ -5,6 +5,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const codigo = (new URLSearchParams(location.search).get('i') || '').trim().toUpperCase();
+  const esPrueba = new URLSearchParams(location.search).has('prueba');   // ?i=CODIGO&prueba=1: no anota la apertura
 
   /* ---------------- Contenido desde config.js ---------------- */
   $$('[data-novia]').forEach(el => (el.textContent = B.novia));
@@ -270,7 +271,7 @@
       return { ok: true };
     }
     const res = metodo === 'GET'
-      ? await fetch(`${B.apiUrl}?i=${encodeURIComponent(codigo)}`)
+      ? await fetch(`${B.apiUrl}?i=${encodeURIComponent(codigo)}${esPrueba ? '&prueba=1' : ''}`)
       : await fetch(B.apiUrl, { method: 'POST', body: JSON.stringify(datos) }); // text/plain: sin preflight CORS
     return res.json();
   }
