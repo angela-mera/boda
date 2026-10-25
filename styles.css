@@ -235,8 +235,7 @@ i[class^="ph"] { line-height: 1; }
   font-size: calc(2.8rem - 1px);
   text-wrap: balance;          /* si el nombre es largo, se parte en 2 líneas parejas */
   line-height: 1.2;
-  color: var(--crema);         /* nombre del invitado en blanco */
-  text-shadow: 0 1px 3px rgba(40, 50, 30, .45);
+  color: #56634A;              /* nombre del invitado: verde oscuro del encaje del sobre */
 }
 .sobre-toca {
   font-family: var(--serif);
