@@ -224,9 +224,8 @@ i[class^="ph"] { line-height: 1; }
   text-align: center;
   transition: opacity .4s ease;
 }
-/* Sombra suave para que los textos claros se lean bien sobre el verde */
-.sobre-abajo { text-shadow: 0 1px 3px rgba(40, 50, 30, .45); }   /* sombra solo en los textos blancos de abajo */
-.sobre-para { font-style: italic; font-size: 1.4rem; color: rgba(237, 228, 207, .85); }
+/* Textos de abajo del sobre: café bronce, como las letras VS del sello */
+.sobre-para { font-style: italic; font-size: 1.4rem; color: #584833; }
 .sobre-para strong {
   display: block;
   font-family: var(--script);
@@ -235,14 +234,14 @@ i[class^="ph"] { line-height: 1; }
   font-size: 2.8rem;
   text-wrap: balance;          /* si el nombre es largo, se parte en 2 líneas parejas */
   line-height: 1.2;
-  color: var(--crema);
+  color: #584833;
 }
 .sobre-toca {
   font-family: var(--serif);
   font-size: 1rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--crema);
+  color: #584833;
   animation: latido 2.2s ease-in-out infinite;
 }
 @keyframes latido { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
