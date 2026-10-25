@@ -49,7 +49,7 @@ i[class^="ph"] { line-height: 1; }
   --oliva-oscuro: #8E9A79;
   --oliva-claro: #B2BB9F;
   --crema: #FFFDF7;
-  --dorado-suave: #FFFDF7;     /* nombres del sobre: blanco */
+  --dorado-suave: #584833;     /* nombres del sobre: café bronce, como las letras VS del sello */
   --lado: 40vh;
   --punta: 56vh;
 
@@ -173,7 +173,7 @@ i[class^="ph"] { line-height: 1; }
   font-size: clamp(.8rem, 3.6vw, 1rem);
   letter-spacing: .32em;
   text-transform: uppercase;
-  color: #EDE4CF;              /* crema amarillito */
+  color: #584833;              /* café bronce, como las letras VS del sello */
 }
 .sobre-nombres {
   font-family: var(--script);
@@ -225,7 +225,7 @@ i[class^="ph"] { line-height: 1; }
   transition: opacity .4s ease;
 }
 /* Sombra suave para que los textos claros se lean bien sobre el verde */
-.sobre-texto, .sobre-abajo { text-shadow: 0 1px 3px rgba(40, 50, 30, .45); }
+.sobre-abajo { text-shadow: 0 1px 3px rgba(40, 50, 30, .45); }   /* sombra solo en los textos blancos de abajo */
 .sobre-para { font-style: italic; font-size: 1.4rem; color: rgba(237, 228, 207, .85); }
 .sobre-para strong {
   display: block;
