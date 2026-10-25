@@ -231,10 +231,11 @@ i[class^="ph"] { line-height: 1; }
   font-family: var(--script);
   font-style: normal;
   font-weight: 400;
-  font-size: 2.8rem;
+  font-size: calc(2.8rem - 1px);
   text-wrap: balance;          /* si el nombre es largo, se parte en 2 líneas parejas */
   line-height: 1.2;
-  color: #584833;
+  color: var(--crema);         /* nombre del invitado en blanco */
+  text-shadow: 0 1px 3px rgba(40, 50, 30, .45);
 }
 .sobre-toca {
   font-family: var(--serif);
