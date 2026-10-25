@@ -49,7 +49,7 @@ i[class^="ph"] { line-height: 1; }
   --oliva-oscuro: #8E9A79;
   --oliva-claro: #B2BB9F;
   --crema: #FFFDF7;
-  --dorado-suave: #977C41;     /* nombres del sobre: dorado profundo (se lee bien sobre el verde) */
+  --dorado-suave: #BBA36C;     /* nombres del sobre: dorado intermedio */
   --lado: 40vh;
   --punta: 56vh;
 
@@ -180,7 +180,6 @@ i[class^="ph"] { line-height: 1; }
   font-size: clamp(2.4rem, 11vw, 4rem);
   line-height: 1.1;
   color: var(--dorado-suave);
-  text-shadow: 0 1px 2px rgba(255, 248, 230, .35);   /* brillo claro: resalta el dorado oscuro */
 }
 
 /* Sello de cera bronce */
