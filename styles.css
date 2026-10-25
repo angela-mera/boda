@@ -45,11 +45,11 @@ i[class^="ph"] { line-height: 1; }
    los calcula app.js según el tamaño de la pantalla.
    ========================================================= */
 .pantalla-sobre {
-  --oliva: #728A73;          /* verde salvia */
-  --oliva-oscuro: #677E68;
-  --oliva-claro: #8A9F88;
-  --crema: #EDE4CF;
-  --dorado-suave: #CDB585;     /* nombres del sobre: dorado un poco más oscuro */
+  --oliva: #9DA888;          /* verde salvia satinado (color de la tela de referencia) */
+  --oliva-oscuro: #8E9A79;
+  --oliva-claro: #B2BB9F;
+  --crema: #FFFDF7;
+  --dorado-suave: #FFF8E8;     /* nombres del sobre: blanco crema (el dorado se perdía en este verde) */
   --lado: 40vh;
   --punta: 56vh;
 
@@ -224,6 +224,8 @@ i[class^="ph"] { line-height: 1; }
   text-align: center;
   transition: opacity .4s ease;
 }
+/* Sombra suave para que los textos claros se lean bien sobre el verde */
+.sobre-texto, .sobre-abajo { text-shadow: 0 1px 3px rgba(40, 50, 30, .45); }
 .sobre-para { font-style: italic; font-size: 1.4rem; color: rgba(237, 228, 207, .85); }
 .sobre-para strong {
   display: block;

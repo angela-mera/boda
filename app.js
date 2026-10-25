@@ -139,7 +139,7 @@
 
     const k = Math.min(Math.max(W / 375, 1), 1.5);           // escala del encaje
     const banda = 16 * k, radio = 7 * k, paso = 13 * k;
-    const tela = '#3E5141', hueco = '#728A73';
+    const tela = '#56634A', hueco = '#9DA888';
     let franjas = '', ondas = '', huecos = '', puntos = '', bordes = '';
 
     [[0, lado, W / 2, punta], [W, lado, W / 2, punta]].forEach(([ax, ay, bx, by]) => {
