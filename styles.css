@@ -49,7 +49,7 @@ i[class^="ph"] { line-height: 1; }
   --oliva-oscuro: #8E9A79;
   --oliva-claro: #B2BB9F;
   --crema: #FFFDF7;
-  --dorado-suave: #FFF8E8;     /* nombres del sobre: blanco crema (el dorado se perdía en este verde) */
+  --dorado-suave: #CDB585;     /* nombres del sobre: dorado suave */
   --lado: 40vh;
   --punta: 56vh;
 
@@ -173,7 +173,7 @@ i[class^="ph"] { line-height: 1; }
   font-size: clamp(.8rem, 3.6vw, 1rem);
   letter-spacing: .32em;
   text-transform: uppercase;
-  color: var(--crema);
+  color: #EDE4CF;              /* crema amarillito */
 }
 .sobre-nombres {
   font-family: var(--script);
