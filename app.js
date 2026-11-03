@@ -259,7 +259,9 @@
   const DEMOS = {
     DEMO: { ok: true, invitacion: 'Ana y Luis', personas: ['Ana', 'Luis'], menores: [], respuestas: {} },
     DEMO1: { ok: true, invitacion: 'Julián Torres', personas: ['Julián Torres'], menores: [], respuestas: {} },
-    DEMO2: { ok: true, invitacion: 'Familia Pérez Cardona', personas: ['Ana María', 'Luis Carlos', 'Pedro'], menores: ['Lucía'], respuestas: {} }
+    DEMO2: { ok: true, invitacion: 'Familia Pérez Cardona', personas: ['Ana María', 'Luis Carlos', 'Pedro'], menores: ['Lucía'], respuestas: {} },
+    // ?i=DEMO3 → participación (familia en el extranjero): sin ubicaciones ni confirmación
+    DEMO3: { ok: true, participacion: true, invitacion: 'Familia Gómez Ríos', personas: ['Carmen', 'Andrés'], menores: [], respuestas: {} }
   };
 
   async function api(metodo, datos) {
@@ -450,6 +452,14 @@
         return;
       }
       personalizar(r);
+      if (r.participacion) {                          // participación: solo se ve el mensaje del final
+        document.body.classList.add('participacion');
+        // Los títulos dicen "Participación" en vez de "Nuestra boda"
+        $$('[data-participacion]').forEach(e => (e.textContent = e.dataset.participacion));
+        $$('[data-participacion-label]').forEach(e => e.setAttribute('aria-label', e.dataset.participacionLabel));
+        $('#despedida').hidden = false;
+        return;
+      }
       const respondio = todos().every(p => r.respuestas[p]);
       if (respondio) {
         pintarGracias();

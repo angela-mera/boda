@@ -575,6 +575,14 @@ body.revelado .portada-texto > :nth-child(3) { animation-delay: .5s; }
 }
 @media (min-width: 760px) { .onda { height: 100px; } .vestimenta { padding-top: 150px; } }
 
+/* ---------- Participación (familiares que no pueden asistir) ----------
+   Se ocultan ubicaciones, vestimenta, regalos, tips y confirmación; al final va un mensaje especial */
+body.participacion .solo-invitados { display: none; }
+body:not(.participacion) .solo-participacion { display: none; }
+.despedida { padding-top: 130px; }
+.despedida .texto-grande { margin: 0; }
+@media (min-width: 760px) { .despedida { padding-top: 150px; } }
+
 
 /* ---------- Tips para el gran día ---------- */
 .tips {

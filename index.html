@@ -25,20 +25,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Mea+Culpa&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
   <!-- Íconos: Phosphor Icons (https://phosphoricons.com) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/light/style.css">
-  <link rel="stylesheet" href="styles.css?v=57">
+  <link rel="stylesheet" href="styles.css?v=59">
 </head>
 <body class="bloqueado">
 
   <!-- ============ PANTALLA DEL SOBRE (toda la pantalla es el sobre) ============ -->
   <div id="pantalla-sobre" class="pantalla-sobre">
-    <button class="sobre" id="btn-abrir" type="button" aria-label="Abrir invitación">
+    <button class="sobre" id="btn-abrir" type="button" aria-label="Abrir invitación" data-participacion-label="Abrir participación">
       <!-- interior del sobre (se ve al abrir la solapa) -->
       <span class="sobre-interior"></span>
 
       <!-- carta que sale al abrir -->
       <span class="sobre-carta">
         <img src="assets/monograma.png" alt="">
-        <span class="carta-mini">Nuestra boda</span>
+        <span class="carta-mini" data-participacion="Participación">Nuestra boda</span>
       </span>
 
       <!-- cuerpo del sobre -->
@@ -73,7 +73,7 @@
       <video class="portada-video" id="portada-video" muted loop playsinline preload="metadata"></video>
       <div class="portada-velo"></div>
       <div class="portada-texto">
-        <p class="eyebrow">Nuestra boda</p>
+        <p class="eyebrow" data-participacion="Participación de matrimonio">Nuestra boda</p>
         <h1 class="nombres">
           <span data-novia></span>
           <span class="amp">&amp;</span>
@@ -93,14 +93,19 @@
           Con gran alegría nos complace anunciar que hemos decidido unir nuestras vidas en matrimonio.
         </p>
         <p class="texto-grande reveal">
-          Este día especial es el comienzo de un nuevo capítulo de nuestra historia, uno que
-          queremos escribir junto a <span data-singular="ti y a todos nuestros amigos y familiares queridos">ustedes, nuestros amigos y familiares queridos</span>.
+          Este día especial es el comienzo de un nuevo capítulo de nuestra historia<span class="solo-invitados">, uno que
+          queremos escribir junto a <span data-singular="ti y a todos nuestros amigos y familiares queridos">ustedes, nuestros amigos y familiares queridos</span></span>.
+        </p>
+        <!-- Solo en las participaciones (familiares que no pueden asistir) -->
+        <p class="texto-grande reveal solo-participacion">
+          Aunque la distancia no nos permita estar juntos ese día, queremos que
+          <span data-singular="sepas que eres">sepan que son</span> parte fundamental de nuestra historia.
         </p>
 
         <span class="separador reveal" aria-hidden="true"></span>
 
         <!-- Fecha y cuenta regresiva -->
-        <p class="eyebrow reveal">Reserva la fecha</p>
+        <p class="eyebrow reveal solo-invitados">Reserva la fecha</p>
         <div class="calendario reveal">
           <span class="cal-mes">Diciembre</span>
           <div class="cal-fila">
@@ -119,7 +124,7 @@
     </section>
 
     <!-- Ceremonia y recepción (fondo con video) -->
-    <section class="seccion con-fondo" data-fondo="eventos">
+    <section class="seccion con-fondo solo-invitados" data-fondo="eventos">
       <div class="contenido eventos">
         <article class="evento evento-arriba reveal">
           <i class="ph-light ph-church icono"></i>
@@ -157,7 +162,7 @@
     </section>
 
     <!-- Código de vestimenta (liso) -->
-    <section class="seccion vestimenta">
+    <section class="seccion vestimenta solo-invitados">
       <!-- Onda que separa esta sección de "Nuestra historia" -->
       <svg class="onda" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
         <path class="onda-relleno" d="M0,0H1440V38C1180,96 900,4 560,52C330,84 150,74 0,46Z"/>
@@ -185,7 +190,7 @@
     </section>
 
     <!-- Recomendaciones para el día de la boda -->
-    <section class="seccion tips">
+    <section class="seccion tips solo-invitados">
       <div class="contenido">
         <p class="eyebrow reveal">Recomendaciones</p>
         <h2 class="titulo-script reveal">Tips para nuestro gran día</h2>
@@ -254,7 +259,7 @@
     </section>
 
     <!-- Confirmación de asistencia (con fondo) -->
-    <section class="seccion con-fondo rsvp" id="rsvp" data-fondo="rsvp">
+    <section class="seccion con-fondo rsvp solo-invitados" id="rsvp" data-fondo="rsvp">
       <div class="contenido">
         <div class="tarjeta reveal">
           <i class="ph-light ph-envelope-simple icono"></i>
@@ -274,6 +279,20 @@
       </div>
     </section>
 
+    <!-- Solo en las "participaciones" (familiares que no pueden asistir): mensaje de despedida -->
+    <section class="seccion despedida" id="despedida" hidden>
+      <svg class="onda" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+        <path class="onda-relleno" d="M0,0H1440V38C1180,96 900,4 560,52C330,84 150,74 0,46Z"/>
+        <path class="onda-linea" d="M0,62C150,90 330,100 560,68C900,20 1180,112 1440,54"/>
+      </svg>
+      <div class="contenido">
+        <p class="texto-grande reveal">
+          Gracias por <span data-singular="tu cariño y tus">su cariño y sus</span> buenos deseos desde la distancia.
+          <span data-singular="Te llevamos">Los llevamos</span> siempre en el corazón.
+        </p>
+      </div>
+    </section>
+
     <footer class="pie">
       <div class="ornamento" aria-hidden="true"></div>
       <p class="pie-nombres"><span data-novia></span> &amp; <span data-novio></span></p>
@@ -287,7 +306,7 @@
     <i class="ph-light ph-speaker-high"></i>
   </button>
 
-  <script src="config.js?v=57"></script>
-  <script src="app.js?v=57"></script>
+  <script src="config.js?v=59"></script>
+  <script src="app.js?v=59"></script>
 </body>
 </html>

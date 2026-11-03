@@ -15,10 +15,12 @@ const HOJA_RESUMEN = 'Resumen';
 // Columnas de "Invitados" (1 = A)
 const C_CODIGO = 1, C_NOMBRE = 2, C_ADULTOS = 3, C_NINOS = 4, C_PASES = 5, C_ENLACE = 6, C_WHATSAPP = 7;
 const C_PRIMERA = 8, C_ULTIMA = 9, C_VECES = 10;    // cuándo abrieron la invitación
+const C_TIPO = 11;                                  // "Invitación" (o vacío) / "Participación"
+const PARTICIPACION = 'Participación';              // familiares que no asisten: sin ubicaciones ni confirmación
 const ZONA_HORARIA = 'America/Bogota';
 const ENCABEZADOS_INV = [
   'Código', 'Invitación (como se muestra)', 'Adultos (separados por coma)', 'Niños (separados por coma)',
-  'Pases', 'Enlace', 'WhatsApp', 'Primera vez abierta', 'Última vez abierta', 'Veces abierta'
+  'Pases', 'Enlace', 'WhatsApp', 'Primera vez abierta', 'Última vez abierta', 'Veces abierta', 'Tipo'
 ];
 const ENCABEZADOS_RESP = ['Fecha', 'Código', 'Invitación', 'Persona', '¿Asiste?', 'Alergias', 'Tipo'];
 
@@ -69,6 +71,7 @@ function prepararHojas() {
  * - Respuestas: la columna G pasa a ser "Tipo" (Adulto / Niño).
  * - Invitados: quita la columna "Estado" (las respuestas ya están en la pestaña Respuestas).
  * - Invitados: agrega las columnas de aperturas (primera vez, última vez y veces).
+ * - Invitados: agrega la columna "Tipo" (Invitación / Participación) con una lista para elegir.
  */
 function asegurarEstructura() {
   const ss = SpreadsheetApp.getActive();
@@ -96,6 +99,16 @@ function asegurarEstructura() {
     cambio = true;
   }
 
+  if (inv && !inv.getRange(1, C_TIPO).getValue()) {
+    inv.getRange(1, C_TIPO).setValue(ENCABEZADOS_INV[C_TIPO - 1]);
+    estilizarEncabezado(inv, ENCABEZADOS_INV.length);
+    inv.setColumnWidth(C_TIPO, 130);
+    const lista = SpreadsheetApp.newDataValidation()
+      .requireValueInList(['Invitación', PARTICIPACION], true).setAllowInvalid(false).build();
+    inv.getRange(2, C_TIPO, inv.getMaxRows() - 1, 1).setDataValidation(lista);
+    cambio = true;
+  }
+
   const resp = ss.getSheetByName(HOJA_RESP);
   if (resp && resp.getRange('G1').getValue() !== 'Tipo') {
     resp.getRange('G1').setValue('Tipo');
@@ -119,18 +132,22 @@ function rehacerResumen() {
 // Pestaña Resumen: etiqueta en la columna B y total en la C, cada fila en su recuadro
 function crearResumen(res) {
   res.clear();
+  // Las participaciones (columna K) no cuentan como invitados: no asisten ni confirman
+  const noPart = '(Invitados!K2:K<>"' + PARTICIPACION + '")';
   const filas = [
     // fila, etiqueta, fórmula, color de fondo
-    [2, 'Total Invitaciones Enviadas', '=COUNTA(Invitados!B2:B)', null],
+    [2, 'Total Invitaciones Enviadas', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!K2:K,"<>' + PARTICIPACION + '")', null],
     // Personas = pases (adultos) + niños de la columna D (cuenta los nombres separados por coma)
-    [4, 'Total Personas invitadas', '=SUM(Invitados!E2:E)+SUMPRODUCT((LEN(TRIM(Invitados!D2:D))>0)*(LEN(Invitados!D2:D)-LEN(SUBSTITUTE(Invitados!D2:D,",",""))+1))', null],
+    [4, 'Total Personas invitadas', '=SUMIFS(Invitados!E2:E,Invitados!K2:K,"<>' + PARTICIPACION + '")+SUMPRODUCT(' + noPart + '*(LEN(TRIM(Invitados!D2:D))>0)*(LEN(Invitados!D2:D)-LEN(SUBSTITUTE(Invitados!D2:D,",",""))+1))', null],
     [5, '✓ Asisten', '=COUNTIF(Respuestas!E2:E,"Sí")', '#D9EAD3'],
     [6, '✗ No asisten', '=COUNTIF(Respuestas!E2:E,"No")', '#F4CCCC'],
     [8, 'Personas sin responder', '=C4-C5-C6', null],
     // Invitaciones con código que todavía no tienen ninguna fila en Respuestas
-    [9, 'Invitaciones sin responder', '=SUMPRODUCT((Invitados!A2:A<>"")*(COUNTIF(Respuestas!B2:B,Invitados!A2:A)=0))', null],
-    [10, 'Invitaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"")', null],
-    [12, 'Niños que asisten', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null]
+    [9, 'Invitaciones sin responder', '=SUMPRODUCT((Invitados!A2:A<>"")*' + noPart + '*(COUNTIF(Respuestas!B2:B,Invitados!A2:A)=0))', null],
+    [10, 'Invitaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"",Invitados!K2:K,"<>' + PARTICIPACION + '")', null],
+    [12, 'Niños que asisten', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null],
+    [17, 'Participaciones enviadas', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!K2:K,"' + PARTICIPACION + '")', null],
+    [18, 'Participaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"",Invitados!K2:K,"' + PARTICIPACION + '")', null]
   ];
   filas.forEach(([fila, etiqueta, formula, color]) => {
     res.getRange(fila, 2).setValue(etiqueta);
@@ -146,7 +163,7 @@ function crearResumen(res) {
     .setFormula('=IFERROR(FILTER(Respuestas!D2:D&" — "&Respuestas!F2:F,Respuestas!F2:F<>""),"Ninguna por ahora")')
     .setBorder(true, true, true, true, false, false);
 
-  res.getRange('B2:C15').setFontSize(11).setVerticalAlignment('middle');
+  res.getRange('B2:C18').setFontSize(11).setVerticalAlignment('middle');
   res.setColumnWidth(1, 40);
   res.setColumnWidth(2, 230);
   res.setColumnWidth(3, 140);
@@ -163,9 +180,10 @@ function generarEnlaces() {
   const n = hoja.getLastRow() - 1;
   if (n < 1) return;
   const datos = hoja.getRange(2, 1, n, C_WHATSAPP).getValues();
+  const tipos = hoja.getRange(2, C_TIPO, n, 1).getValues();
   const usados = new Set(datos.map(f => String(f[0]).trim().toUpperCase()).filter(Boolean));
 
-  datos.forEach(fila => {
+  datos.forEach((fila, i) => {
     const nombre = String(fila[C_NOMBRE - 1]).trim();
     if (!nombre) return;
     let codigo = String(fila[C_CODIGO - 1]).trim().toUpperCase();
@@ -181,8 +199,14 @@ function generarEnlaces() {
     // Los emojis van como código para que no se dañen al copiar: 🤍 ✨ 💍 💌
     const corazon = '\u{1F90D}', brillo = '\u{2728}', anillo = '\u{1F48D}', carta = '\u{1F48C}';
     const una = total === 1;
-    const texto =
-      `¡Hola, ${nombre}! ${corazon}${brillo}\n\n` +
+    const texto = esParticipacion(tipos[i][0])
+      // Participación: familiares que no pueden asistir (no se les pide confirmar)
+      ? `¡Hola, ${nombre}! ${corazon}${brillo}\n\n` +
+        `Aunque la distancia nos separe, queremos compartir ${una ? 'contigo' : 'con ustedes'} la alegría ` +
+        `de uno de los días más especiales de nuestras vidas: ¡nuestra boda! ${anillo}\n\n` +
+        `${carta} ${una ? 'Descubre tu' : 'Descubran su'} participación aquí: ${enlace}\n\n` +
+        `Con cariño,\n*${NOVIOS}*`
+      : `¡Hola, ${nombre}! ${corazon}${brillo}\n\n` +
       `Con mucha ilusión y amor, queremos ${una ? 'invitarte' : 'invitarlos'} a celebrar con nosotros ` +
       `uno de los días más especiales de nuestras vidas: ¡nuestra boda!\n\n` +
       `${anillo} Nos haría muy felices compartir este momento tan bonito ${una ? 'contigo' : 'con ustedes'}. ${corazon}\n\n` +
@@ -198,6 +222,11 @@ function generarEnlaces() {
   // Los enlaces son largos: se recortan en su columna en vez de verse encima de las de al lado
   hoja.getRange(2, C_ENLACE, n, 2).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
   SpreadsheetApp.getUi().alert('Códigos y enlaces generados ✅\nAbre el enlace de la columna WhatsApp para enviar cada invitación.');
+}
+
+// "Participación" en la columna Tipo (sin importar tildes ni mayúsculas)
+function esParticipacion(valor) {
+  return String(valor || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') === 'participacion';
 }
 
 function codigoAleatorio() {
@@ -223,14 +252,15 @@ function buscarInvitacion(codigo) {
   const hoja = SpreadsheetApp.getActive().getSheetByName(HOJA_INV);
   const n = hoja.getLastRow() - 1;
   if (!codigo || n < 1) return null;
-  const datos = hoja.getRange(2, 1, n, C_NINOS).getValues();
+  const datos = hoja.getRange(2, 1, n, C_TIPO).getValues();
   for (let i = 0; i < datos.length; i++) {
     if (String(datos[i][0]).trim().toUpperCase() === codigo) {
       const nombre = String(datos[i][C_NOMBRE - 1]).trim();
       return {
         fila: i + 2, codigo, nombre,
         adultos: listaPersonas(datos[i][C_ADULTOS - 1], nombre),
-        menores: listaNombres(datos[i][C_NINOS - 1])
+        menores: listaNombres(datos[i][C_NINOS - 1]),
+        participacion: esParticipacion(datos[i][C_TIPO - 1])
       };
     }
   }
@@ -258,6 +288,9 @@ function doGet(e) {
   const inv = buscarInvitacion(codigo);
   if (!inv) return json({ ok: false, error: 'no_encontrada' });
   if (!e.parameter.prueba) registrarApertura(inv);   // "&prueba=1" en el enlace = no se anota
+  if (inv.participacion) {                            // participación: no confirma asistencia
+    return json({ ok: true, participacion: true, invitacion: inv.nombre, personas: inv.adultos, menores: inv.menores, respuestas: {} });
+  }
 
   const respuestas = {};
   const hoja = SpreadsheetApp.getActive().getSheetByName(HOJA_RESP);
@@ -282,6 +315,7 @@ function doPost(e) {
     asegurarEstructura();
     const inv = buscarInvitacion(String(datos.i || '').trim().toUpperCase());
     if (!inv) return json({ ok: false, error: 'no_encontrada' });
+    if (inv.participacion) return json({ ok: false, error: 'participacion' });
 
     // Solo se aceptan las personas registradas en la invitación (adultos y niños por nombre)
     const recibidas = Array.isArray(datos.respuestas) ? datos.respuestas : [];
