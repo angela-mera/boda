@@ -146,8 +146,8 @@ function crearResumen(res) {
     [9, 'Invitaciones sin responder', '=SUMPRODUCT((Invitados!A2:A<>"")*' + noPart + '*(COUNTIF(Respuestas!B2:B,Invitados!A2:A)=0))', null],
     [10, 'Invitaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"",Invitados!K2:K,"<>' + PARTICIPACION + '")', null],
     [12, 'Niños que asisten', '=COUNTIFS(Respuestas!E2:E,"Sí",Respuestas!G2:G,"Niño")', null],
-    [17, 'Participaciones enviadas', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!K2:K,"' + PARTICIPACION + '")', null],
-    [18, 'Participaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"",Invitados!K2:K,"' + PARTICIPACION + '")', null]
+    [14, 'Participaciones enviadas', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!K2:K,"' + PARTICIPACION + '")', null],
+    [15, 'Participaciones sin abrir', '=COUNTIFS(Invitados!B2:B,"<>",Invitados!H2:H,"",Invitados!K2:K,"' + PARTICIPACION + '")', null]
   ];
   filas.forEach(([fila, etiqueta, formula, color]) => {
     res.getRange(fila, 2).setValue(etiqueta);
@@ -156,14 +156,15 @@ function crearResumen(res) {
     if (color) recuadro.setBackground(color);
   });
 
-  // Alergias: una línea por persona, "Nombre — alergia"
-  res.getRange('B14').setValue('Alergias reportadas').setFontWeight('bold')
+  // Alergias: una línea por persona, "Nombre — alergia". Va de última porque la lista
+  // crece hacia abajo y necesita las filas de debajo libres.
+  res.getRange('B17').setValue('Alergias reportadas').setFontWeight('bold')
     .setBorder(true, true, true, true, false, false);
-  res.getRange('B15')
+  res.getRange('B18')
     .setFormula('=IFERROR(FILTER(Respuestas!D2:D&" — "&Respuestas!F2:F,Respuestas!F2:F<>""),"Ninguna por ahora")')
     .setBorder(true, true, true, true, false, false);
 
-  res.getRange('B2:C18').setFontSize(11).setVerticalAlignment('middle');
+  res.getRange('B2:C100').setFontSize(11).setVerticalAlignment('middle');
   res.setColumnWidth(1, 40);
   res.setColumnWidth(2, 230);
   res.setColumnWidth(3, 140);
